@@ -8,48 +8,42 @@
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background-color: #4b3621; /* Brown background */
+      background-color: #4d3227;
       color: #fff;
     }
-
     .container {
       display: flex;
-      height: 100vh;
     }
-
     /* Sidebar */
     .sidebar {
-      width: 20%;
-      background-color: #3c2d1c;
+      width: 250px;
+      background-color: #3b251c;
+      height: 100vh;
       padding: 20px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+      box-sizing: border-box;
     }
-
-    .sidebar .menu {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
+    .sidebar h2 {
+      font-size: 18px;
+      margin-bottom: 20px;
+      color: #d9c1b8;
     }
-
     .menu-item {
-      padding: 10px 15px;
-      border-radius: 5px;
-      text-align: left;
-      cursor: pointer;
-      background-color: transparent;
-      color: #fff;
+      color: #d9c1b8;
       font-size: 16px;
-      transition: background-color 0.3s;
+      margin: 10px 0;
+      padding: 10px;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      border-radius: 5px;
     }
-
-    .menu-item:hover, .menu-item.active {
-      background-color: #5c4531;
+    .menu-item:hover,
+    .menu-item.active {
+      background-color: #7b5a4b;
     }
-
-    .menu-item i {
+    .menu-item img {
+      width: 20px;
+      height: 20px;
       margin-right: 10px;
     }
 
@@ -149,24 +143,50 @@
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="sidebar">
-      <div class="menu">
-        <div class="menu-item active">Dashboard</div>
-        <div class="menu-item">Risk Monitoring</div>
-        <div class="menu-item">Threat Management</div>
-        <div class="menu-item">Risk Assessment</div>
-        <div class="menu-item">Asset Management</div>
-        <div class="menu-item">Reports Page</div>
-        <div class="menu-item">Mitigation Planning</div>
-        <div class="menu-item">Settings</div>
-      </div>
-      <div class="menu-item">Log Out</div>
-    </div>
+    <div class="container">
+        <div class="sidebar">
+          <img src="photo/hwda pink.png" alt="">
+          <div class="menu-item">
+            <img src="photo/dashboard.png" alt="Dashboard Icon">
+            Dashboard
+          </div>
+          <div class="menu-item">
+            <img src="photo/riskmonitor.png" alt="Risk Monitoring Icon">
+            <a href="RiskMonitoring.html">Risk Monitoring</a>
+          </div>
+          <div class="menu-item active">
+            <img src="photo/ThreatManagement.png" alt="Threat Management Icon">
+            Threat Management
+          </div>
+          <div class="menu-item">
+            <img src="photo/RiskAssessment.png" alt="Risk Assessment Icon">
+            Risk Assessment
+          </div>
+          <div class="menu-item">
+            <img src="photo/assetManagement.png" alt="Asset Management Icon">
+            Asset Management
+          </div>
+          <div class="menu-item">
+            <img src="photo/ReportsPage.png" alt="Reports Page Icon">
+            Reports Page
+          </div>
+          <div class="menu-item">
+            <img src="photo/mitigationplan.png" alt="Mitigation Planning Icon">
+            Mitigation Planning
+          </div>
+          <div class="menu-item">
+            <img src="photo/settings.png" alt="Settings Icon">
+            Settings
+          </div>
+          <div class="menu-item">
+            <img src="photo/logout.png" alt="Log Out Icon">
+            Log Out
+          </div>
+        </div>
 
     <div class="main-content">
       <div class="main-section">
-        <h1>Threat Management Page</h1>
+        <h1>Threat Management</h1>
         <div class="form-group">
           <label for="threat-name">Threat Name:</label>
           <input type="text" id="threat-name" placeholder="Enter threat name">
