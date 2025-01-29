@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Risk Assessment Page</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #D7C4B7;
+      color: #e6d2c5;
+    }
+
+    .container {
+      display: flex;
+      
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 250px;
+      background-color: #3b251c;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    .sidebar img {
+      width: 200px;
+      margin-bottom: 1rem;
+    }
+
+    .sidebar a {
+      text-decoration: none;
+      color: #e6d2c5;
+      padding: 1rem;
+      width: 100%;
+      text-align: left;
+      border-radius: 5px;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+    }
+
+    .sidebar a:hover,
+    .sidebar a.active {
+      background-color: #4d342a;
+    }
+
+    .menu-item {
+      color: #d9c1b8;
+      font-size: 16px;
+      margin: 10px 0;
+      padding: 10px;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    .menu-item:hover,
+    .menu-item.active {
+      background-color: #7b5a4b;
+    }
+
+    .menu-item img {
+      width: 20px;
+      height: 20px;
+      margin-right: 10px;
+    }
+
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      padding: 2rem;
+    }
+
+    .header {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      font-weight: bold;
+      color: #4d342a;
+    }
+
+    .form-section,
+    .chart-section {
+      margin-bottom: 2rem;
+      background-color: #6b4e3b;
+      padding: 1.5rem;
+      border-radius: 10px;
+    }
+
+    .form-section h3,
+    .chart-section h3 {
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+    }
+
+    select {
+      width: 100%;
+      padding: 0.5rem;
+      font-size: 0.9rem;
+      border: none;
+      border-radius: 5px;
+      background-color: #4d342a;
+      color: #e6d2c5;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .buttons button {
+      flex: 1;
+      padding: 0.7rem;
+      border: none;
+      border-radius: 5px;
+      background-color: #2e1e16;
+      color: #e6d2c5;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+
+    .buttons button:hover {
+      background-color: #4d342a;
+    }
+
+    /* Chart Placeholder */
+    .chart-placeholder {
+      width: 100%;
+      height: 200px;
+      background-color: #4d342a;
+      border-radius: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #e6d2c5;
+    }
+
+    .footer {
+      font-size: 0.8rem;
+      text-align: center;
+      margin-top: 2rem;
+      color: #4d342a;
+    }
+  </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+          <img src="photo/hwda pink.png" alt="">
+          <div class="menu-item ">
+            <img src="photo/dashboard.png" alt="Dashboard Icon">
+            Dashboard
+          </div>
+          <div class="menu-item">
+            <img src="photo/riskmonitor.png" alt="Risk Monitoring Icon">
+            Risk Monitoring
+          </div>
+          <div class="menu-item">
+            <img src="photo/ThreatManagement.png" alt="Threat Management Icon">
+            Threat Management
+          </div>
+          <div class="menu-item active">
+            <img src="photo/RiskAssessment.png" alt="Risk Assessment Icon">
+            Risk Assessment
+          </div>
+          <div class="menu-item">
+            <img src="photo/assetManagement.png" alt="Asset Management Icon">
+            Asset Management
+          </div>
+          <div class="menu-item">
+            <img src="photo/ReportsPage.png" alt="Reports Page Icon">
+            Reports Page
+          </div>
+          <div class="menu-item">
+            <img src="photo/mitigationplan.png" alt="Mitigation Planning Icon">
+            Mitigation Planning
+          </div>
+          <div class="menu-item">
+            <img src="photo/settings.png" alt="Settings Icon">
+            Settings
+          </div>
+          <div class="menu-item">
+            <img src="photo/logout.png" alt="Log Out Icon">
+            Log Out
+          </div>
+        </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <div class="header">Risk Assessment Page</div>
+      
+      <!-- Form Section -->
+      <div class="form-section">
+        <h3>Risk Assessment Form</h3>
+        <div class="form-group">
+          <label for="asset">Select Asset:</label>
+          <select id="asset">
+            <option>Asset 1</option>
+            <option>Asset 2</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="threat">Select Threat:</label>
+          <select id="threat">
+            <option>Threat 1</option>
+            <option>Threat 2</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="likelihood">Likelihood:</label>
+          <select id="likelihood">
+            <option>Low</option>
+            <option>Medium</option>
+            <option>High</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="impact">Impact:</label>
+          <select id="impact">
+            <option>Low</option>
+            <option>Medium</option>
+            <option>High</option>
+          </select>
+        </div>
+        <div class="buttons">
+          <button>Edit</button>
+          <button>Delete</button>
+          <button>Save</button>
+        </div>
+      </div>
+
+      <!-- Chart Section -->
+      <div class="chart-section">
+        <h3>Outputs</h3>
+        <div class="chart-placeholder">Donut Chart Placeholder</div>
+      </div>
+
+      <div class="footer">HWDA © 2025</div>
+    </div>
+  </div>
+</body>
+</html>
