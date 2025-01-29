@@ -6,18 +6,22 @@
     <title>Document</title>
     <style>
         body {
-        background-color: #E4E0E1; /* Brown background */
+        background-color: #D6C0B3; /* Brown background */
         font-family: Arial, sans-serif;
         }
 
         .container {
         width: 500px;
-        height: 700px;
+        height: 580px;
         margin: 0 auto;
         padding: 20px;
         background-color: #493628;
         border-radius: 10px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
         }
 
         img {
@@ -30,16 +34,19 @@
         padding: 10px;
         margin: 10px 0;
         border: 1px solid #D2B48C; /* Light brown border */
-        border-radius: 5px;
+        border-radius: 10px;
+        text-align: center;
         }
 
         button {
-        width: 90%;
+        width: 40%;
         padding: 10px;
-        background-color: #5C4033; /* Dark brown */
-        color: white;
+        text-align: center;
+        justify-content: ce;
+        background-color: #D6C0B3; /* Dark brown */
+        color: #5C4033;
         border: none;
-        border-radius: 5px;
+        border-radius: 10px;
         cursor: pointer;
         }
 
@@ -51,7 +58,7 @@
         display: block;
         text-align: center;
         margin-top: 10px;
-        color: #5C4033; /* Dark brown */
+        color: #D6C0B3; /* Dark brown */
         text-decoration: none;
         }
     </style>
@@ -62,8 +69,8 @@
     <form>
       <input type="text" placeholder="Username/Gmail" required>
       <input type="password" placeholder="Password" required>
-      <button type="submit">Log In</button>
-      </form>
+    </form>
+    <button type="submit">Log In</button>
     <a href="#">Forgot Password?</a>
   </div>
   <script src="script.js"></script>
