@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Threat Management Page</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #4b3621; /* Brown background */
+      color: #fff;
+    }
+
+    .container {
+      display: flex;
+      height: 100vh;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 20%;
+      background-color: #3c2d1c;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+    }
+
+    .sidebar .menu {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .menu-item {
+      padding: 10px 15px;
+      border-radius: 5px;
+      text-align: left;
+      cursor: pointer;
+      background-color: transparent;
+      color: #fff;
+      font-size: 16px;
+      transition: background-color 0.3s;
+    }
+
+    .menu-item:hover, .menu-item.active {
+      background-color: #5c4531;
+    }
+
+    .menu-item i {
+      margin-right: 10px;
+    }
+
+    /* Main Content */
+    .main-content {
+      width: 80%;
+      padding: 30px;
+      display: flex;
+      gap: 30px;
+    }
+
+    .main-section {
+      flex: 3;
+      background-color: #d4b59b;
+      padding: 20px;
+      border-radius: 10px;
+      color: #3c2d1c;
+    }
+
+    .main-section h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+
+    .form-group textarea {
+      resize: none;
+    }
+
+    /* Right Sidebar (Real-time Threat Feed) */
+    .right-sidebar {
+      flex: 1;
+      background-color: #d4b59b;
+      padding: 20px;
+      border-radius: 10px;
+      color: #3c2d1c;
+    }
+
+    .feed-title {
+      font-size: 20px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .feed-item {
+      background-color: #fff;
+      color: #3c2d1c;
+      padding: 10px;
+      margin-bottom: 15px;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .feed-item h3 {
+      margin: 0;
+      font-size: 16px;
+    }
+
+    .feed-item .details {
+      font-size: 12px;
+      margin-top: 5px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .feed-item .details button {
+      background-color: #5c4531;
+      color: #fff;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    .feed-item .details button:hover {
+      background-color: #3c2d1c;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="sidebar">
+      <div class="menu">
+        <div class="menu-item active">Dashboard</div>
+        <div class="menu-item">Risk Monitoring</div>
+        <div class="menu-item">Threat Management</div>
+        <div class="menu-item">Risk Assessment</div>
+        <div class="menu-item">Asset Management</div>
+        <div class="menu-item">Reports Page</div>
+        <div class="menu-item">Mitigation Planning</div>
+        <div class="menu-item">Settings</div>
+      </div>
+      <div class="menu-item">Log Out</div>
+    </div>
+
+    <div class="main-content">
+      <div class="main-section">
+        <h1>Threat Management Page</h1>
+        <div class="form-group">
+          <label for="threat-name">Threat Name:</label>
+          <input type="text" id="threat-name" placeholder="Enter threat name">
+        </div>
+        <div class="form-group">
+          <label for="threat-source">Threat Source:</label>
+          <select id="threat-source">
+            <option value="">Choose the threat</option>
+            <option value="insider">Insider Threat</option>
+            <option value="malware">Malware</option>
+            <option value="external">External Attack</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="threat-description">Threat Description:</label>
+          <textarea id="threat-description" rows="4" placeholder="Text the description..."></textarea>
+        </div>
+        <div class="form-group">
+          <label for="threat-severity">Threat Severity:</label>
+          <select id="threat-severity">
+            <option value="">Select severity</option>
+            <option value="low">Low</option>
+            <option value="medium">Medium</option>
+            <option value="high">High</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="right-sidebar">
+        <h2 class="feed-title">Real-Time Threat Feed</h2>
+        <div class="feed-item">
+          <h3>Phishing Attack</h3>
+          <div class="details">
+            <span>2025-01-28 10:00:00 UTC</span>
+            <button>See Details</button>
+          </div>
+        </div>
+        <div class="feed-item">
+          <h3>Malware Infection</h3>
+          <div class="details">
+            <span>2025-01-27 14:00:00 UTC</span>
+            <button>See Details</button>
+          </div>
+        </div>
+        <div class="feed-item">
+          <h3>Insider Threats</h3>
+          <div class="details">
+            <span>2025-01-26 17:30:00 UTC</span>
+            <button>See Details</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
