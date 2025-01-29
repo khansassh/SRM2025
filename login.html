@@ -5,10 +5,67 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <style>
-        
+        body {
+        background-color: #E4E0E1; /* Brown background */
+        font-family: Arial, sans-serif;
+        }
+
+        .container {
+        width: 500px;
+        height: 700px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #493628;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        img {
+        display: block;
+        margin: 0 auto 20px;
+        }
+
+        input {
+        width: 90%;
+        padding: 10px;
+        margin: 10px 0;
+        border: 1px solid #D2B48C; /* Light brown border */
+        border-radius: 5px;
+        }
+
+        button {
+        width: 90%;
+        padding: 10px;
+        background-color: #5C4033; /* Dark brown */
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        }
+
+        button:hover {
+        background-color: #4B3226; /* Darker brown on hover */
+        }
+
+        a {
+        display: block;
+        text-align: center;
+        margin-top: 10px;
+        color: #5C4033; /* Dark brown */
+        text-decoration: none;
+        }
     </style>
 </head>
 <body>
-    
+    <div class="container">
+    <img src="photo/hwda pink.png" alt="HWDA Logo">
+    <form>
+      <input type="text" placeholder="Username/Gmail" required>
+      <input type="password" placeholder="Password" required>
+      <button type="submit">Log In</button>
+      </form>
+    <a href="#">Forgot Password?</a>
+  </div>
+  <script src="script.js"></script>
 </body>
 </html>
