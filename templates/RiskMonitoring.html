@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Risk Monitoring Page</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #4d3227;
+      color: #fff;
+    }
+    .container {
+      display: flex;
+    }
+    /* Sidebar */
+    .sidebar {
+      width: 250px;
+      background-color: #3b251c;
+      height: 100vh;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    .sidebar h2 {
+      font-size: 18px;
+      margin-bottom: 20px;
+      color: #d9c1b8;
+    }
+    .menu-item {
+      color: #d9c1b8;
+      font-size: 16px;
+      margin: 10px 0;
+      padding: 10px;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      border-radius: 5px;
+      text-decoration: none;
+    }
+    .menu-item:hover,
+    .menu-item.active {
+      background-color: #7b5a4b;
+    }
+    .menu-item img {
+      width: 20px;
+      height: 20px;
+      margin-right: 10px;
+    }
+
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      padding: 20px;
+      background-color: #4d3227;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #d4b59b;
+    }
+    .header .search-bar {
+      background-color: #9a775a;
+      padding: 5px 10px;
+      border-radius: 5px;
+      color: #fff;
+      display: flex;
+      align-items: center;
+    }
+    .header .search-bar input {
+      background: none;
+      border: none;
+      color: #fff;
+      outline: none;
+      margin-right: 5px;
+    }
+    .header .search-bar img {
+      width: 20px; 
+      height: 20px; 
+      cursor: pointer;
+    }
+    .header .search-bar input::placeholder {
+      color: #d9c1b8;
+    }
+
+    /* Table */
+    .table-container {
+      margin-top: 20px;
+      background-color: #d4b59b;
+      padding: 20px;
+      border-radius: 10px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      text-align: left;
+      padding: 12px;
+    }
+    th {
+      background-color: #9a775a;
+      color: #fff;
+    }
+    td {
+      background-color: #d4b59b;
+      color: #4d3227;
+    }
+    td a {
+      color: #4d3227;
+      text-decoration: none;
+    }
+    td a:hover {
+      text-decoration: underline;
+    }
+
+    /* Risk Widgets */
+    .risk-widgets {
+      margin-top: 20px;
+      display: flex;
+      gap: 20px;
+    }
+    .risk-widget {
+      flex: 1;
+      background-color: #d4b59b;
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+      color: #4d3227;
+    }
+    .risk-widget .progress-bar {
+      width: 100%;
+      height: 20px;
+      border-radius: 10px;
+      margin-top: 10px;
+      position: relative;
+      background-color: #f5ebe6;
+    }
+    .risk-widget .progress-bar .progress {
+      height: 100%;
+      border-radius: 10px;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+    .progress-high {
+      width: 95%;
+      background-color: red;
+    }
+    .progress-medium {
+      width: 67%;
+      background-color: orange;
+    }
+    .progress-low {
+      width: 5%;
+      background-color: green;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="sidebar">
+      <img src="/static/photo/hwda pink.png" alt="">
+      <a href="dashboard.html" class="menu-item">
+        <img src="/static/photo/dashboard.png" alt="Dashboard Icon">
+        Dashboard
+      </a>
+      <a href="riskmonitoring.html" class="menu-item active">
+        <img src="/static/photo/riskmonitor.png" alt="Risk Monitoring Icon">
+        Risk Monitoring
+      </a>
+      <a href="threatmanagement.html" class="menu-item">
+        <img src="/static/photo/ThreatManagement.png" alt="Threat Management Icon">
+        Threat Management
+      </a>
+      <a href="riskassessment.html" class="menu-item">
+        <img src="/static/photo/RiskAssessment.png" alt="Risk Assessment Icon">
+        Risk Assessment
+      </a>
+      <a href="assetmanagement.html" class="menu-item">
+        <img src="/static/photo/assetManagement.png" alt="Asset Management Icon">
+        Asset Management
+      </a>
+      <a href="reportspage.html" class="menu-item">
+        <img src="/static/photo/ReportsPage.png" alt="Reports Page Icon">
+        Reports Page
+      </a>
+      <a href="mitigationplan.html" class="menu-item">
+        <img src="/static/photo/mitigationplan.png" alt="Mitigation Planning Icon">
+        Mitigation Planning
+      </a>
+      <a href="settings.html" class="menu-item">
+        <img src="/static/photo/settings.png" alt="Settings Icon">
+        Settings
+      </a>
+      <a href="logout.html" class="menu-item">
+        <img src="/static/photo/logout.png" alt="Log Out Icon">
+        Log Out
+      </a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <div class="header">
+        <h1>Risk Monitoring Page</h1>
+        <div class="search-bar">
+          <input type="text" placeholder="Search">
+         <img src="/static/photo/search.png" alt="searchpict">
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>File ID</th>
+              <th>Affected Asset Name</th>
+              <th>Threat Name</th>
+              <th>Time</th>
+              <th>File Size</th>
+              <th>Risk Type</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>001</td>
+              <td>File X</td>
+              <td>Malware</td>
+              <td>10:00 AM</td>
+              <td>2 MB</td>
+              <td>High Risk</td>
+              <td><a href="#">Details</a></td>
+            </tr>
+            <!-- Add more rows as needed -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Risk Widgets -->
+      <div class="risk-widgets">
+        <div class="risk-widget">
+          <h3>File X</h3>
+          <p>95% over risk - High Risk</p>
+          <div class="progress-bar">
+            <div class="progress progress-high"></div>
+          </div>
+        </div>
+        <div class="risk-widget">
+          <h3>File Y</h3>
+          <p>67% over risk - Medium Risk</p>
+          <div class="progress-bar">
+            <div class="progress progress-medium"></div>
+          </div>
+        </div>
+        <div class="risk-widget">
+          <h3>File Z</h3>
+          <p>5% over risk - Low Risk</p>
+          <div class="progress-bar">
+            <div class="progress progress-low"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
