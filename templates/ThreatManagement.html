@@ -142,6 +142,22 @@
     .feed-item .details button:hover {
       background-color: #3c2d1c;
     }
+
+    /* Submit Button */
+    .submit-btn {
+      background-color: #5c4531;
+      color: white;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      width: 100%;
+      font-size: 16px;
+    }
+
+    .submit-btn:hover {
+      background-color: #3c2d1c;
+    }
   </style>
 </head>
 <body>
@@ -185,57 +201,48 @@
     <div class="main-content">
       <div class="main-section">
         <h1>Threat Management</h1>
-        <div class="form-group">
-          <label for="threat-name">Threat Name:</label>
-          <input type="text" id="threat-name" placeholder="Enter threat name">
-        </div>
-        <div class="form-group">
-          <label for="threat-source">Threat Source:</label>
-          <select id="threat-source">
-            <option value="">Choose the threat</option>
-            <option value="insider">Insider Threat</option>
-            <option value="malware">Malware</option>
-            <option value="external">External Attack</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="threat-description">Threat Description:</label>
-          <textarea id="threat-description" rows="4" placeholder="Text the description..."></textarea>
-        </div>
-        <div class="form-group">
-          <label for="threat-severity">Threat Severity:</label>
-          <select id="threat-severity">
-            <option value="">Select severity</option>
-            <option value="low">Low</option>
-            <option value="medium">Medium</option>
-            <option value="high">High</option>
-          </select>
-        </div>
+        <form method="POST" action="{{ url_for('threat_management') }}">
+          <div class="form-group">
+            <label for="threat-name">Threat Name:</label>
+            <input type="text" id="threat-name" name="threat-name" placeholder="Enter threat name">
+          </div>
+          <div class="form-group">
+            <label for="threat-source">Threat Source:</label>
+            <select id="threat-source" name="threat-source">
+              <option value="">Choose the threat</option>
+              <option value="insider">Insider Threat</option>
+              <option value="malware">Malware</option>
+              <option value="external">External Attack</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="threat-description">Threat Description:</label>
+            <textarea id="threat-description" name="threat-description" rows="4" placeholder="Text the description..."></textarea>
+          </div>
+          <div class="form-group">
+            <label for="threat-severity">Threat Severity:</label>
+            <select id="threat-severity" name="threat-severity">
+              <option value="">Select severity</option>
+              <option value="low">Low</option>
+              <option value="medium">Medium</option>
+              <option value="high">High</option>
+            </select>
+          </div>
+          <button type="submit" class="submit-btn">Submit Threat</button>
+        </form>
       </div>
 
       <div class="right-sidebar">
         <h2 class="feed-title">Real-Time Threat Feed</h2>
+        {% for threat in threats %}
         <div class="feed-item">
-          <h3>Phishing Attack</h3>
+          <h3>{{ threat.threat_name }}</h3> <!-- Access by name -->
           <div class="details">
-            <span>2025-01-28 10:00:00 UTC</span>
+            <span>{{ threat.created_at.strftime('%Y-%m-%d %H:%M:%S UTC') }}</span> <!-- Access by name -->
             <button>See Details</button>
           </div>
         </div>
-        <div class="feed-item">
-          <h3>Malware Infection</h3>
-          <div class="details">
-            <span>2025-01-27 14:00:00 UTC</span>
-            <button>See Details</button>
-          </div>
-        </div>
-        <div class="feed-item">
-          <h3>Insider Threats</h3>
-          <div class="details">
-            <span>2025-01-26 17:30:00 UTC</span>
-            <button>See Details</button>
-          </div>
-        </div>
+        {% endfor %}
       </div>
     </div>
   </div>

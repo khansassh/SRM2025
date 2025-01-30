@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Risk Assessment Page</title>
+  <title>Risk Monitoring Page</title>
   <style>
     body {
       margin: 0;
@@ -11,7 +11,6 @@
       background-color: #4d3227;
       color: #fff;
     }
-
     .container {
       display: flex;
       width: 100%;
@@ -49,98 +48,123 @@
       height: 20px;
       margin-right: 10px;
     }
+
     /* Main Content */
     .main-content {
-      width: 80%;
-      padding: 30px;
-      display: flex;
-      flex-direction: column;
+      flex: 1;
+      padding: 20px;
+      background-color: #4d3227;
     }
-
     .header {
-      font-size: 24px;
-      margin-bottom: 1rem;
-      font-weight: bold;
-      text-align: center;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #d4b59b;
+    }
+    .header .search-bar {
+      background-color: #9a775a;
+      padding: 5px 10px;
+      border-radius: 5px;
+      color: #fff;
+      display: flex;
+      align-items: center;
+    }
+    .header .search-bar input {
+      background: none;
+      border: none;
+      color: #fff;
+      outline: none;
+      margin-right: 5px;
+    }
+    .header .search-bar img {
+      width: 20px; 
+      height: 20px; 
+      cursor: pointer;
+    }
+    .header .search-bar input::placeholder {
+      color: #d9c1b8;
     }
 
-    .form-section,
-    .chart-section {
-      margin-bottom: 2rem;
+    /* Table */
+    .table-container {
+      margin-top: 20px;
       background-color: #d4b59b;
       padding: 20px;
       border-radius: 10px;
-      color: #3c2d1c;
     }
-
-    .form-section h3,
-    .chart-section h3 {
-      margin-bottom: 1rem;
-      font-size: 1.2rem;
-      text-align: center;
-    }
-
-    .form-group {
-      margin-bottom: 1rem;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 0.5rem;
-      font-size: 0.9rem;
-      color: #3c2d1c;
-    }
-
-    select {
+    table {
       width: 100%;
-      padding: 0.5rem;
-      font-size: 0.9rem;
-      border: 1px solid #ccc;
-      border-radius: 5px;
+      border-collapse: collapse;
     }
-
-    .buttons {
-      display: flex;
-      gap: 1rem;
-      margin-top: 1rem;
+    th, td {
+      text-align: left;
+      padding: 12px;
     }
-
-    .buttons button {
-      flex: 1;
-      padding: 0.7rem;
-      border: none;
-      border-radius: 5px;
-      background-color: #5c4531;
+    th {
+      background-color: #9a775a;
       color: #fff;
-      font-size: 0.9rem;
-      cursor: pointer;
+    }
+    td {
+      background-color: #d4b59b;
+      color: #4d3227;
+    }
+    td a {
+      color: #4d3227;
+      text-decoration: none;
+    }
+    td a:hover {
+      text-decoration: underline;
     }
 
-    .buttons button:hover {
-      background-color: #3c2d1c;
-    }
-
-    /* Chart Placeholder */
-    .chart-placeholder {
-      width: 100%;
-      height: 200px;
-      background-color: #fff;
-      border-radius: 10px;
+    /* Risk Widgets */
+    .risk-widgets {
+      margin-top: 20px;
       display: flex;
-      justify-content: center;
-      align-items: center;
-      color: #3c2d1c;
+      gap: 20px;
     }
-
-    .footer {
-      font-size: 0.8rem;
+    .risk-widget {
+      flex: 1;
+      background-color: #d4b59b;
+      border-radius: 10px;
+      padding: 20px;
       text-align: center;
-      margin-top: 2rem;
+      color: #4d3227;
+    }
+    .risk-widget .progress-bar {
+      width: 100%;
+      height: 20px;
+      border-radius: 10px;
+      margin-top: 10px;
+      position: relative;
+      background-color: #f5ebe6;
+    }
+    .risk-widget .progress-bar .progress {
+      height: 100%;
+      border-radius: 10px;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+    .progress-high {
+      width: 95%;
+      background-color: red;
+    }
+    .progress-medium {
+      width: 67%;
+      background-color: orange;
+    }
+    .progress-low {
+      width: 5%;
+      background-color: green;
+    }
+    .dynamic-progress {
+      width: var(--progress-width);
+      background-color: var(--progress-color);
     }
   </style>
 </head>
 <body>
-  <div class="container">
+<div class="container">
     <div class="sidebar">
         <img src="/static/photo/hwda pink.png" alt="">
         <a href="{{ url_for('dashboard') }}" class="menu-item">
@@ -176,59 +200,87 @@
             Settings
         </a>
     </div>
-    
+
     <!-- Main Content -->
     <div class="main-content">
-      <div class="header">Risk Assessment Page</div>
-      
-      <!-- Form Section -->
-      <div class="form-section">
-        <h3>Risk Assessment Form</h3>
-        <div class="form-group">
-          <label for="asset">Select Asset:</label>
-          <select id="asset">
-            <option>Asset 1</option>
-            <option>Asset 2</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="threat">Select Threat:</label>
-          <select id="threat">
-            <option>Threat 1</option>
-            <option>Threat 2</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="likelihood">Likelihood:</label>
-          <select id="likelihood">
-            <option>Low</option>
-            <option>Medium</option>
-            <option>High</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="impact">Impact:</label>
-          <select id="impact">
-            <option>Low</option>
-            <option>Medium</option>
-            <option>High</option>
-          </select>
-        </div>
-        <div class="buttons">
-          <button>Edit</button>
-          <button>Delete</button>
-          <button>Save</button>
+      <div class="header">
+        <h1>Risk Monitoring Page</h1>
+        <div class="search-bar">
+          <input type="text" id="search-input" placeholder="Search">
+          <img src="/static/photo/search.png" alt="searchpict">
         </div>
       </div>
 
-      <!-- Chart Section -->
-      <div class="chart-section">
-        <h3>Outputs</h3>
-        <div class="chart-placeholder">Donut Chart Placeholder</div>
+      <div class="table-container">
+        <table id="risk-table">
+          <thead>
+            <tr>
+              <th>File ID</th>
+              <th>Affected Asset</th>
+              <th>Threat Name</th>
+              <th>Time</th>
+              <th>File Size</th>
+              <th>Risk Type</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for risk in risks %}
+            <tr>
+              <td>{{ risk[1] }}</td>
+              <td>{{ risk[2] }}</td>
+              <td>{{ risk[3] }}</td>
+              <td>{{ risk[4] }}</td>
+              <td>{{ risk[5] }}</td>
+              <td>{{ risk[6] }}</td>
+              <td><a href="#">Details</a></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
       </div>
 
-      <div class="footer">HWDA © 2025</div>
+      <!-- Risk Widgets -->
+      <div class="risk-widgets">
+        <div class="risk-widget">
+          <h3>High Risk Files</h3>
+          <p>{{ risk_stats[0] }} High Risk Entries</p>
+          <div class="progress-bar">
+            <div class="progress dynamic-progress" 
+                 style="--progress-width: 95%; --progress-color: red"></div>
+          </div>
+        </div>
+        <div class="risk-widget">
+          <h3>Medium Risk Files</h3>
+          <p>{{ risk_stats[1] }} Medium Risk Entries</p>
+          <div class="progress-bar">
+            <div class="progress dynamic-progress" 
+                 style="--progress-width: 67%; --progress-color: orange"></div>
+          </div>
+        </div>
+        <div class="risk-widget">
+          <h3>Low Risk Files</h3>
+          <p>{{ risk_stats[2] }} Low Risk Entries</p>
+          <div class="progress-bar">
+            <div class="progress dynamic-progress" 
+                 style="--progress-width: 5%; --progress-color: green"></div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
+
+  <!-- JavaScript for Search Functionality -->
+  <script>
+    document.getElementById('search-input').addEventListener('input', function() {
+      const query = this.value.toLowerCase();
+      const rows = document.querySelectorAll('#risk-table tbody tr');
+      
+      rows.forEach(row => {
+        const text = row.textContent.toLowerCase();
+        row.style.display = text.includes(query) ? '' : 'none';
+      });
+    });
+  </script>
 </body>
 </html>

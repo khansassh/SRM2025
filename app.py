@@ -19,7 +19,9 @@ def get_db_connection():
         user=DB_USER,
         password=DB_PASS
     )
-    return conn
+    # Use DictCursor to return results as dictionaries
+    cursor = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    return conn, cursor
 
 # Routes
 
@@ -33,8 +35,7 @@ def register():
         # Hash the password before storing it in the database
         password_hash = generate_password_hash(password)
         
-        conn = get_db_connection()
-        cursor = conn.cursor()
+        conn, cursor = get_db_connection()
         
         # Insert the user into the database
         cursor.execute("INSERT INTO users (username, email, password_hash) VALUES (%s, %s, %s)",
@@ -54,8 +55,7 @@ def login():
         username = request.form['username']
         password = request.form['password']
         
-        conn = get_db_connection()
-        cursor = conn.cursor()
+        conn, cursor = get_db_connection()
         
         # Fetch the user from the database
         cursor.execute("SELECT * FROM users WHERE username = %s", (username,))
@@ -64,7 +64,7 @@ def login():
         cursor.close()
         conn.close()
         
-        if user and check_password_hash(user[3], password):  # user[3] is the hashed password column
+        if user and check_password_hash(user['password_hash'], password):  # Access by column name
             return redirect(url_for('dashboard'))  # Redirect to dashboard on successful login
         else:
             flash('Invalid credentials. Please try again.', 'error')
@@ -90,8 +90,7 @@ def signin():
         # Hash the password before saving it
         hashed_password = generate_password_hash(password)
 
-        conn = get_db_connection()
-        cursor = conn.cursor()
+        conn, cursor = get_db_connection()
         
         # Check if the user already exists
         cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
@@ -116,7 +115,7 @@ def signin():
 
 @app.route('/asset-management', methods=['GET', 'POST'])
 def asset_management():
-    conn = get_db_connection()
+    conn, cursor = get_db_connection()
     
     if request.method == 'POST':
         try:
@@ -126,7 +125,6 @@ def asset_management():
             criticality_level = request.form['criticality_level']
             owner = request.form['owner']
 
-            cursor = conn.cursor()
             cursor.execute(
                 "INSERT INTO assets (asset_name, asset_type, description, criticality_level, owner) "
                 "VALUES (%s, %s, %s, %s, %s)",
@@ -137,11 +135,8 @@ def asset_management():
         except Exception as e:
             conn.rollback()
             flash(f'Error saving asset: {str(e)}', 'error')
-        finally:
-            cursor.close()
-
+    
     # Get all assets for display
-    cursor = conn.cursor()
     cursor.execute("SELECT * FROM assets ORDER BY created_at DESC")
     assets = cursor.fetchall()
     cursor.close()
@@ -161,17 +156,91 @@ def reports():
 def risk_assessment():
     return render_template('RiskAssessment.html')
 
-@app.route('/risk-monitoring')
+@app.route('/risk-monitoring', methods=['GET', 'POST'])
 def risk_monitoring():
-    return render_template('RiskMonitoring.html')
+    conn, cursor = get_db_connection()
+    
+    if request.method == 'POST':
+        try:
+            # Extract form data
+            file_id = request.form['file_id']
+            affected_asset = request.form['affected_asset']
+            threat_name = request.form['threat_name']
+            file_size = request.form['file_size']
+            risk_type = request.form['risk_type']
+
+            cursor.execute(
+                "INSERT INTO risks (file_id, affected_asset, threat_name, file_size, risk_type) "
+                "VALUES (%s, %s, %s, %s, %s)",
+                (file_id, affected_asset, threat_name, file_size, risk_type)
+            )
+            conn.commit()
+            flash('Risk entry added successfully!', 'success')
+        except Exception as e:
+            conn.rollback()
+            flash(f'Error saving risk entry: {str(e)}', 'error')
+    
+    # Get all risks
+    cursor.execute("""
+        SELECT id, file_id, affected_asset, threat_name, 
+               to_char(detected_time, 'HH12:MI AM') as time,
+               file_size, risk_type 
+        FROM risks 
+        ORDER BY detected_time DESC
+    """)
+    risks = cursor.fetchall()
+    
+    # Get risk statistics for widgets
+    cursor.execute("""
+        SELECT 
+            COUNT(*) FILTER (WHERE risk_type = 'High Risk') as high_risk,
+            COUNT(*) FILTER (WHERE risk_type = 'Medium Risk') as medium_risk,
+            COUNT(*) FILTER (WHERE risk_type = 'Low Risk') as low_risk
+        FROM risks
+    """)
+    risk_stats = cursor.fetchone()
+    
+    cursor.close()
+    conn.close()
+
+    return render_template('RiskMonitoring.html', 
+                         risks=risks, 
+                         risk_stats=risk_stats)
 
 @app.route('/settings')
 def settings():
     return render_template('Settings.html')
 
-@app.route('/threat-management')
+@app.route('/threat-management', methods=['GET', 'POST'])
 def threat_management():
-    return render_template('ThreatManagement.html')
+    conn, cursor = get_db_connection()  # Use the updated connection function
+    
+    # Handle form submission
+    if request.method == 'POST':
+        threat_name = request.form.get('threat-name')
+        threat_source = request.form.get('threat-source')
+        description = request.form.get('threat-description')
+        severity = request.form.get('threat-severity')
+        
+        try:
+            cursor.execute(
+                "INSERT INTO threats (threat_name, threat_source, description, severity) "
+                "VALUES (%s, %s, %s, %s)",
+                (threat_name, threat_source, description, severity)
+            )
+            conn.commit()
+            flash('Threat added successfully!', 'success')
+        except Exception as e:
+            conn.rollback()
+            flash(f'Error saving threat: {str(e)}', 'error')
+    
+    # Get threats for real-time feed
+    cursor.execute("SELECT * FROM threats ORDER BY created_at DESC")
+    threats = cursor.fetchall()  # This will now return dictionaries
+    cursor.close()
+    conn.close()
+    
+    return render_template('ThreatManagement.html', threats=threats)
 
 if __name__ == '__main__':
     app.run(debug=True)
