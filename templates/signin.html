@@ -112,15 +112,15 @@
             <div class="image-logo">
                 <img src="/static/photo/HWDA.png" alt="HWDA Logo">
             </div>
-            <form>
+            <form action="/signin" method="POST">
                 <div class="form-group">
-                    <input type="text" placeholder="Fullname" required>
+                    <input type="text" name="fullname" placeholder="Fullname" required>
                 </div>
                 <div class="form-group">
-                    <input type="email" placeholder="Gmail" required>
+                    <input type="email" name="email" placeholder="Gmail" required>
                 </div>
                 <div class="form-group">
-                    <input type="password" placeholder="Password" required>
+                    <input type="password" name="password" placeholder="Password" required>
                 </div>
                 <button class="btn" type="submit">Start</button>
             </form>
