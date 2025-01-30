@@ -36,6 +36,7 @@
       align-items: center;
       cursor: pointer;
       border-radius: 5px;
+      text-decoration: none;
     }
     .menu-item:hover,
     .menu-item.active {
@@ -57,10 +58,10 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      color: #d9c1b8;
+      color: #d4b59b;
     }
     .header .search-bar {
-      background-color: #7b5a4b;
+      background-color: #9a775a;
       padding: 5px 10px;
       border-radius: 5px;
       color: #fff;
@@ -75,8 +76,8 @@
       margin-right: 5px;
     }
     .header .search-bar img {
-      width: 20px; /* Adjust the width of the search icon */
-      height: 20px; /* Adjust the height of the search icon */
+      width: 20px; 
+      height: 20px; 
       cursor: pointer;
     }
     .header .search-bar input::placeholder {
@@ -86,7 +87,7 @@
     /* Table */
     .table-container {
       margin-top: 20px;
-      background-color: #d9c1b8;
+      background-color: #d4b59b;
       padding: 20px;
       border-radius: 10px;
     }
@@ -99,11 +100,11 @@
       padding: 12px;
     }
     th {
-      background-color: #7b5a4b;
+      background-color: #9a775a;
       color: #fff;
     }
     td {
-      background-color: #f5ebe6;
+      background-color: #d4b59b;
       color: #4d3227;
     }
     td a {
@@ -122,7 +123,7 @@
     }
     .risk-widget {
       flex: 1;
-      background-color: #d9c1b8;
+      background-color: #d4b59b;
       border-radius: 10px;
       padding: 20px;
       text-align: center;
@@ -159,45 +160,44 @@
 </head>
 <body>
   <div class="container">
-    <!-- Sidebar -->
     <div class="sidebar">
       <img src="photo/hwda pink.png" alt="">
-      <div class="menu-item ">
+      <a href="dashboard.html" class="menu-item">
         <img src="photo/dashboard.png" alt="Dashboard Icon">
         Dashboard
-      </div>
-      <div class="menu-item active">
+      </a>
+      <a href="riskmonitoring.html" class="menu-item active">
         <img src="photo/riskmonitor.png" alt="Risk Monitoring Icon">
         Risk Monitoring
-      </div>
-      <div class="menu-item">
+      </a>
+      <a href="threatmanagement.html" class="menu-item">
         <img src="photo/ThreatManagement.png" alt="Threat Management Icon">
         Threat Management
-      </div>
-      <div class="menu-item">
+      </a>
+      <a href="riskassessment.html" class="menu-item">
         <img src="photo/RiskAssessment.png" alt="Risk Assessment Icon">
         Risk Assessment
-      </div>
-      <div class="menu-item">
+      </a>
+      <a href="assetmanagement.html" class="menu-item">
         <img src="photo/assetManagement.png" alt="Asset Management Icon">
         Asset Management
-      </div>
-      <div class="menu-item">
+      </a>
+      <a href="reportspage.html" class="menu-item">
         <img src="photo/ReportsPage.png" alt="Reports Page Icon">
         Reports Page
-      </div>
-      <div class="menu-item">
+      </a>
+      <a href="mitigationplan.html" class="menu-item">
         <img src="photo/mitigationplan.png" alt="Mitigation Planning Icon">
         Mitigation Planning
-      </div>
-      <div class="menu-item">
+      </a>
+      <a href="settings.html" class="menu-item">
         <img src="photo/settings.png" alt="Settings Icon">
         Settings
-      </div>
-      <div class="menu-item">
+      </a>
+      <a href="logout.html" class="menu-item">
         <img src="photo/logout.png" alt="Log Out Icon">
         Log Out
-      </div>
+      </a>
     </div>
 
     <!-- Main Content -->
