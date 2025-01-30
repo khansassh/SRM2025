@@ -5,49 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mitigation Planning Page</title>
     <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background-color: #4d3227;
-      color: #fff;
-    }
-    .container {
-      display: flex;
-      width: 100%;
-      height: flex;
-    }
-    .sidebar {
-      width: 250px;
-      background-color: #3b251c;
-      height: flex; /* Fixed sidebar height */
-      padding: 20px;
-      box-sizing: border-box;
-    }
-    .sidebar h2 {
-      font-size: 18px;
-      margin-bottom: 20px;
-      color: #d9c1b8;
-    }
-    .menu-item {
-      color: #d9c1b8;
-      font-size: 16px;
-      margin: 10px 0;
-      padding: 10px;
-      display: flex;
-      align-items: center;
-      cursor: pointer;
-      border-radius: 5px;
-      text-decoration: none;
-    }
-    .menu-item:hover,
-    .menu-item.active {
-      background-color: #7b5a4b;
-    }
-    .menu-item img {
-      width: 20px;
-      height: 20px;
-      margin-right: 10px;
-    }
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #4d3227;
+            color: #fff;
+        }
+        .container {
+            display: flex;
+            width: 100%;
+        }
+        .sidebar {
+            width: 250px;
+            background-color: #3b251c;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .sidebar h2 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #d9c1b8;
+        }
+        .menu-item {
+            color: #d9c1b8;
+            font-size: 16px;
+            margin: 10px 0;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+        .menu-item:hover,
+        .menu-item.active {
+            background-color: #7b5a4b;
+        }
         .main-content {
             background-color: #D6C0B3; 
             padding: 20px;
@@ -94,77 +87,98 @@
             width: 70%; /* Change this value to represent progress */
             border-radius: 5px;
         }
+        .mitigation-plans-list {
+            margin-top: 20px;
+        }
+        .mitigation-plan-item {
+            background-color: #d9c1b8;
+            color: #4b3621;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
-  <div class="container">
-    <div class="sidebar">
-        <img src="/static/photo/hwda pink.png" alt="">
-        <a href="{{ url_for('dashboard') }}" class="menu-item">
-            <img src="/static/photo/dashboard.png" alt="Dashboard Icon">
-            Dashboard
-        </a>
-        <a href="{{ url_for('risk_monitoring') }}" class="menu-item">
-            <img src="/static/photo/riskmonitor.png" alt="Risk Monitoring Icon">
-            Risk Monitoring
-        </a>
-        <a href="{{ url_for('threat_management') }}" class="menu-item">
-            <img src="/static/photo/ThreatManagement.png" alt="Threat Management Icon">
-            Threat Management
-        </a>
-        <a href="{{ url_for('risk_assessment') }}" class="menu-item">
-            <img src="/static/photo/RiskAssessment.png" alt="Risk Assessment Icon">
-            Risk Assessment
-        </a>
-        <a href="{{ url_for('asset_management') }}" class="menu-item">
-            <img src="/static/photo/assetManagement.png" alt="Asset Management Icon">
-            Asset Management
-        </a>
-        <a href="{{ url_for('reports') }}" class="menu-item active">
-            <img src="/static/photo/ReportsPage.png" alt="Reports Page Icon">
-            Reports Page
-        </a>
-        <a href="{{ url_for('mitigation_planning') }}" class="menu-item">
-            <img src="/static/photo/mitigationplan.png" alt="Mitigation Planning Icon">
-            Mitigation Planning
-        </a>
-        <a href="{{ url_for('settings') }}" class="menu-item">
-            <img src="/static/photo/settings.png" alt="Settings Icon">
-            Settings
-        </a>
-    </div>
-    
+    <div class="container">
+        <div class="sidebar">
+            <img src="/static/photo/hwda pink.png" alt="">
+            <a href="{{ url_for('dashboard') }}" class="menu-item">
+                <img src="/static/photo/dashboard.png" alt="Dashboard Icon">
+                Dashboard
+            </a>
+            <a href="{{ url_for('risk_monitoring') }}" class="menu-item">
+                <img src="/static/photo/riskmonitor.png" alt="Risk Monitoring Icon">
+                Risk Monitoring
+            </a>
+            <a href="{{ url_for('threat_management') }}" class="menu-item">
+                <img src="/static/photo/ThreatManagement.png" alt="Threat Management Icon">
+                Threat Management
+            </a>
+            <a href="{{ url_for('risk_assessment') }}" class="menu-item">
+                <img src="/static/photo/RiskAssessment.png" alt="Risk Assessment Icon">
+                Risk Assessment
+            </a>
+            <a href="{{ url_for('asset_management') }}" class="menu-item">
+                <img src="/static/photo/assetManagement.png" alt="Asset Management Icon">
+                Asset Management
+            </a>
+            <a href="{{ url_for('reports') }}" class="menu-item">
+                <img src="/static/photo/ReportsPage.png" alt="Reports Page Icon">
+                Reports Page
+            </a>
+            <a href="{{ url_for('mitigation_planning') }}" class="menu-item active">
+                <img src="/static/photo/mitigationplan.png" alt="Mitigation Planning Icon">
+                Mitigation Planning
+            </a>
+            <a href="{{ url_for('settings') }}" class="menu-item">
+                <img src="/static/photo/settings.png" alt="Settings Icon">
+                Settings
+            </a>
+        </div>
+        
         <div class="main-content">
             <h2>Mitigation Planning Page</h2>
-            <div class="form-group">
-                <label for="risk-id">Risk ID:</label>
-                <input type="text" id="risk-id" placeholder="Auto-filled based on the selected risk">
-            </div>
-            <div class="form-group">
-                <label for="control-name">Control Name:</label>
-                <select id="control-name">
-                    <option value="firewall">Firewall</option>
-                    <option value="encryption">Encryption</option>
-                    <option value="mfa">Multi-Factor Authentication</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="control-description">Control Description:</label>
-                <textarea id="control-description" rows="3" placeholder="Text area to describe the control"></textarea>
-            </div>
-            <div class="form-group">
-                <label for="assigned-to">Assigned To:</label>
-                <input type="text" id="assigned-to" placeholder="Name of the person assigned">
-            </div>
-            <div class="form-group">
-                <label for="deadline">Deadline:</label>
-                <input type="date" id="deadline">
-            </div>
-            <button class="button">Edit</button>
-            <button class="button">Delete</button>
-            <button class="button">Save</button>
-            <div class="progress">
-                <div></div>
+            <form method="POST">
+                <div class="form-group">
+                    <label for="risk-id">Risk ID:</label>
+                    <input type="text" name="risk_id" id="risk-id" placeholder="Auto-filled based on the selected risk">
+                </div>
+                <div class="form-group">
+                    <label for="control-name">Control Name:</label>
+                    <select name="control_name" id="control-name">
+                        <option value="firewall">Firewall</option>
+                        <option value="encryption">Encryption</option>
+                        <option value="mfa">Multi-Factor Authentication</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="control-description">Control Description:</label>
+                    <textarea name="control_description" id="control-description" rows="3" placeholder="Text area to describe the control"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="assigned-to">Assigned To:</label>
+                    <input type="text" name="assigned_to" id="assigned-to" placeholder="Name of the person assigned">
+                </div>
+                <div class="form-group">
+                    <label for="deadline">Deadline:</label>
+                    <input type="date" name="deadline" id="deadline">
+                </div>
+                <button type="submit" class="button">Save</button>
+            </form>
+            <div class="mitigation-plans-list">
+                {% for plan in mitigation_plans %}
+                    <div class="mitigation-plan-item">
+                        <strong>Risk ID:</strong> {{ plan.risk_id }}<br>
+                        <strong>Control Name:</strong> {{ plan.control_name }}<br>
+                        <strong>Control Description:</strong> {{ plan.control_description }}<br>
+                        <strong>Assigned To:</strong> {{ plan.assigned_to }}<br>
+                        <strong>Deadline:</strong> {{ plan.deadline }}<br>
+                        <strong>Created At:</strong> {{ plan.created_at }}<br>
+                    </div>
+                {% else %}
+                    <p>No mitigation plans found.</p>
+                {% endfor %}
             </div>
         </div>
     </div>

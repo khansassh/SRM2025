@@ -8,201 +8,184 @@
     body {
       margin: 0;
       font-family: 'Arial', sans-serif;
-      background-color: #4d342a; /* Brown background */
-      color: #f5ebe0; /* Light cream text */
-    }
-
-    .container {
-            display: flex;
-            width: 100%;
-            height: flex;
-        }
-        .sidebar {
-            width: 250px;
-            background-color: #3b251c;
-            height: flex; /* Fixed sidebar height */
-            padding: 20px;
-            box-sizing: border-box;
-        }
-        .sidebar h2 {
-            font-size: 18px;
-            margin-bottom: 20px;
-            color: #d9c1b8;
-        }
-        .menu-item {
-            color: #d9c1b8;
-            font-size: 16px;
-            margin: 10px 0;
-            padding: 10px;
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-            border-radius: 5px;
-            text-decoration: none;
-        }
-        .menu-item:hover,
-        .menu-item.active {
-            background-color: #7b5a4b;
-        }
-        .menu-item img {
-            width: 20px;
-            height: 20px;
-            margin-right: 10px;
-        }
-
-    .main-content {
-      flex: 1;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      align-items: center;
-    }
-
-    .card {
-      width: 80%;
-      max-width: 900px;
-      background-color: #f5ebe0;
-      border-radius: 10px;
-      padding: 20px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-      margin-bottom: 20px;
-    }
-
-    .card h2 {
-      font-size: 1.5rem;
-      margin-bottom: 20px;
-      color: #4b3621;
-    }
-
-    .button-group {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .button {
-      padding: 10px 20px;
-      font-size: 1rem;
-      background-color: #6e543f;
+      background-color: #4d342a;
       color: #f5ebe0;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      text-align: center;
-      transition: background-color 0.3s ease;
     }
-
-    .button:hover {
-      background-color: #8d6e52;
-    }
-
-    .export-options {
-      margin-top: 20px;
-    }
-
-    .export-preview {
-      width: 80%;
-      max-width: 900px;
+    .container1 {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       padding: 20px;
+    }
+    .container {
+      display: flex;
+      width: 100%;
+      height: flex;
+    }
+    .sidebar {
+      width: 250px;
+      background-color: #3b251c;
+      height: flex;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    .sidebar h2 {
+      font-size: 18px;
+      margin-bottom: 20px;
+      color: #d9c1b8;
+    }
+    .menu-item {
+      color: #d9c1b8;
+      font-size: 16px;
+      margin: 10px 0;
+      padding: 10px;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      border-radius: 5px;
+      text-decoration: none;
+    }
+    .menu-item:hover,
+    .menu-item.active {
+      background-color: #7b5a4b;
+    }
+    .menu-item img {
+      width: 20px;
+      height: 20px;
+      margin-right: 10px;
+    }
+    .report-item {
       background-color: #f5ebe0;
       border-radius: 10px;
+      padding: 20px;
+      width: 80%;
+      max-width: 900px;
+      margin-bottom: 20px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-      margin-top: 20px;
     }
-
-    .export-preview h2 {
+    .report-item h2 {
       font-size: 1.5rem;
       color: #4b3621;
-      margin-bottom: 10px;
     }
-
-    .export-preview textarea {
-      width: 100%;
-      height: 200px;
-      padding: 10px;
+    .report-item p {
       font-size: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      resize: none;
-      background-color: #fff;
+      color: #4b3621;
+    }
+    .no-reports {
+      font-size: 1.2rem;
+      color: #d9c1b8;
+    }
+    .report-generation {
+      background-color: #f5ebe0;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 30px;
+      width: 80%;
+      max-width: 900px;
+    }
+    .report-generation form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    .report-generation input,
+    .report-generation textarea,
+    .report-generation select {
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #7b5a4b;
+      background-color: white;
+      color: #4b3621;
+    }
+    .download-btn {
+      display: inline-block;
+      padding: 8px 15px;
+      background-color: #7b5a4b;
+      color: #f5ebe0;
+      border-radius: 5px;
+      text-decoration: none;
+      margin-top: 10px;
+    }
+    .download-btn:hover {
+      background-color: #4b3621;
     }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="sidebar">
-        <img src="/static/photo/hwda pink.png" alt="">
-        <a href="{{ url_for('dashboard') }}" class="menu-item">
-            <img src="/static/photo/dashboard.png" alt="Dashboard Icon">
-            Dashboard
-        </a>
-        <a href="{{ url_for('risk_monitoring') }}" class="menu-item">
-            <img src="/static/photo/riskmonitor.png" alt="Risk Monitoring Icon">
-            Risk Monitoring
-        </a>
-        <a href="{{ url_for('threat_management') }}" class="menu-item">
-            <img src="/static/photo/ThreatManagement.png" alt="Threat Management Icon">
-            Threat Management
-        </a>
-        <a href="{{ url_for('risk_assessment') }}" class="menu-item">
-            <img src="/static/photo/RiskAssessment.png" alt="Risk Assessment Icon">
-            Risk Assessment
-        </a>
-        <a href="{{ url_for('asset_management') }}" class="menu-item">
-            <img src="/static/photo/assetManagement.png" alt="Asset Management Icon">
-            Asset Management
-        </a>
-        <a href="{{ url_for('reports') }}" class="menu-item">
-            <img src="/static/photo/ReportsPage.png" alt="Reports Page Icon">
-            Reports Page
-        </a>
-        <a href="{{ url_for('mitigation_planning') }}" class="menu-item">
-            <img src="/static/photo/mitigationplan.png" alt="Mitigation Planning Icon">
-            Mitigation Planning
-        </a>
-        <a href="{{ url_for('settings') }}" class="menu-item">
-            <img src="/static/photo/settings.png" alt="Settings Icon">
-            Settings
-        </a>
+      <img src="/static/photo/hwda pink.png" alt="">
+      <a href="{{ url_for('dashboard') }}" class="menu-item">
+        <img src="/static/photo/dashboard.png" alt="Dashboard Icon">
+        Dashboard
+      </a>
+      <a href="{{ url_for('risk_monitoring') }}" class="menu-item">
+        <img src="/static/photo/riskmonitor.png" alt="Risk Monitoring Icon">
+        Risk Monitoring
+      </a>
+      <a href="{{ url_for('threat_management') }}" class="menu-item">
+        <img src="/static/photo/ThreatManagement.png" alt="Threat Management Icon">
+        Threat Management
+      </a>
+      <a href="{{ url_for('risk_assessment') }}" class="menu-item">
+        <img src="/static/photo/RiskAssessment.png" alt="Risk Assessment Icon">
+        Risk Assessment
+      </a>
+      <a href="{{ url_for('asset_management') }}" class="menu-item">
+        <img src="/static/photo/assetManagement.png" alt="Asset Management Icon">
+        Asset Management
+      </a>
+      <a href="{{ url_for('reports') }}" class="menu-item active">
+        <img src="/static/photo/ReportsPage.png" alt="Reports Page Icon">
+        Reports Page
+      </a>
+      <a href="{{ url_for('mitigation_planning') }}" class="menu-item">
+        <img src="/static/photo/mitigationplan.png" alt="Mitigation Planning Icon">
+        Mitigation Planning
+      </a>
+      <a href="{{ url_for('settings') }}" class="menu-item">
+        <img src="/static/photo/settings.png" alt="Settings Icon">
+        Settings
+      </a>
     </div>
 
-    <!-- Main Content -->
-    <div class="main-content">
-      <div class="card">
-        <h2>Reports Type:</h2>
-        <div class="button-group">
-          <button class="button" onclick="showPreview('Summary Report Content')">Summary Report</button>
-          <button class="button" onclick="showPreview('Detailed Risk Report Content')">Detailed Risk Report</button>
-          <button class="button" onclick="showPreview('Threat Report Content')">Threat Report</button>
-        </div>
-
-        <div class="export-options">
-          <h2>Export Options:</h2>
-          <div class="button-group">
-            <button class="button" onclick="exportReport('PDF')">Export as PDF</button>
-            <button class="button" onclick="exportReport('Word')">Export as Word</button>
-          </div>
-        </div>
+    <div class="container1">
+      <h1>Reports</h1>
+      
+      <div class="report-generation">
+        <h2>Generate New Report</h2>
+        <form action="{{ url_for('generate_report') }}" method="post">
+          <input type="text" name="title" placeholder="Report Title" required>
+          <textarea name="content" placeholder="Report Content" rows="6" required></textarea>
+          <select name="format">
+            <option value="pdf">PDF</option>
+            <option value="docx">Word</option>
+          </select>
+          <button type="submit" style="background-color: #7b5a4b; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer;">
+            Generate Report
+          </button>
+        </form>
       </div>
 
-      <div class="export-preview">
-        <h2>Preview:</h2>
-        <textarea id="exportPreview" readonly>
-Select a report type to see a preview here.
-        </textarea>
+      <div class="reports-list">
+        {% for report in reports %}
+          <div class="report-item">
+            <h2>{{ report.title }}</h2>
+            <p>Format: {{ report.format|upper }}</p>
+            <p>Status: {{ report.status }}</p>
+            <p>Created by: {{ report.username }}</p>
+            <p>Created at: {{ report.created_at }}</p>
+            {% if report.status == 'completed' %}
+              <a href="{{ url_for('download_report', report_id=report.id) }}" class="download-btn">
+                Download {{ report.format|upper }}
+              </a>
+            {% endif %}
+          </div>
+        {% else %}
+          <p class="no-reports">No reports found.</p>
+        {% endfor %}
       </div>
     </div>
   </div>
-
-  <script>
-    function showPreview(content) {
-      document.getElementById('exportPreview').value = content;
-    }
-
-    function exportReport(format) {
-      alert(`The report will be exported as a ${format} file.`);
-    }
-  </script>
 </body>
 </html>
