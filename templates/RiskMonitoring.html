@@ -210,56 +210,79 @@
       <!-- Table -->
       <div class="table-container">
         <table>
-          <thead>
-            <tr>
-              <th>File ID</th>
-              <th>Affected Asset Name</th>
-              <th>Threat Name</th>
-              <th>Time</th>
-              <th>File Size</th>
-              <th>Risk Type</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>001</td>
-              <td>File X</td>
-              <td>Malware</td>
-              <td>10:00 AM</td>
-              <td>2 MB</td>
-              <td>High Risk</td>
-              <td><a href="#">Details</a></td>
-            </tr>
-            <!-- Add more rows as needed -->
-          </tbody>
+            <thead>
+                <tr>
+                    <th>Source</th>
+                    <th>Affected Asset</th>
+                    <th>Threat</th>
+                    <th>Time</th>
+                    <th>Risk Type</th>
+                    <th>Details</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for risk in risks %}
+                <tr>
+                    <td>
+                        {% if risk.file_id %}
+                        Manual Entry
+                        {% else %}
+                        Assessment
+                        {% endif %}
+                    </td>
+                    <td>{{ risk.affected_asset }}</td>
+                    <td>{{ risk.threat_name }}</td>
+                    <td>{{ risk.time }}</td>
+                    <td class="risk-{{ risk.risk_type | lower | replace(' ', '-') }}">
+                        {{ risk.risk_type }}
+                    </td>
+                    <td>
+                        {% if risk.likelihood %}
+                        L: {{ risk.likelihood }}, I: {{ risk.impact }}
+                        {% else %}
+                        <a href="#">View File</a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
         </table>
-      </div>
+    </div>
 
       <!-- Risk Widgets -->
       <div class="risk-widgets">
+        {% set total_risk = risk_stats.high_risk + risk_stats.medium_risk + risk_stats.low_risk %}
+        
         <div class="risk-widget">
-          <h3>File X</h3>
-          <p>95% over risk - High Risk</p>
-          <div class="progress-bar">
-            <div class="progress progress-high"></div>
-          </div>
+            <h3>High Risk</h3>
+            <p>{{ risk_stats.high_risk | default(0) }} Items</p>
+            <div class="progress-bar">
+                <<div class="progress progress-high" 
+                     style="width: {% if total_risk > 0 %}{{ (risk_stats.high_risk / total_risk) * 100 }}%{% else %}0%{% endif %}">
+                </div>
+            </div>
         </div>
+        
         <div class="risk-widget">
-          <h3>File Y</h3>
-          <p>67% over risk - Medium Risk</p>
-          <div class="progress-bar">
-            <div class="progress progress-medium"></div>
-          </div>
+            <h3>Medium Risk</h3>
+            <p>{{ risk_stats.medium_risk | default(0) }} Items</p>
+            <div class="progress-bar">
+                <<div class="progress progress-medium" 
+                     style="width: {% if total_risk > 0 %}{{ (risk_stats.medium_risk / total_risk) * 100 }}%{% else %}0%{% endif %}">
+                </div>
+            </div>
         </div>
+        
         <div class="risk-widget">
-          <h3>File Z</h3>
-          <p>5% over risk - Low Risk</p>
-          <div class="progress-bar">
-            <div class="progress progress-low"></div>
-          </div>
+            <h3>Low Risk</h3>
+            <p>{{ risk_stats.low_risk | default(0) }} Items</p>
+            <div class="progress-bar">
+                <<div class="progress progress-low" 
+                     style="width: {% if total_risk > 0 %}{{ (risk_stats.low_risk / total_risk) * 100 }}%{% else %}0%{% endif %}">
+                </div>
+            </div>
         </div>
-      </div>
+    </div>
     </div>
   </div>
 </body>

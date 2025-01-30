@@ -3,90 +3,266 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Dashboard</title>
     <style>
-         body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background-color: #4d3227;
-      color: #fff;
-    }
-    .container {
-      display: flex;
-      width: 100%;
-      height: flex;
-    }
-    .sidebar {
-      width: 250px;
-      background-color: #3b251c;
-      height: flex; /* Fixed sidebar height */
-      padding: 20px;
-      box-sizing: border-box;
-    }
-    .sidebar h2 {
-      font-size: 18px;
-      margin-bottom: 20px;
-      color: #d9c1b8;
-    }
-    .menu-item {
-      color: #d9c1b8;
-      font-size: 16px;
-      margin: 10px 0;
-      padding: 10px;
-      display: flex;
-      align-items: center;
-      cursor: pointer;
-      border-radius: 5px;
-      text-decoration: none;
-    }
-    .menu-item:hover,
-    .menu-item.active {
-      background-color: #7b5a4b;
-    }
-    .menu-item img {
-      width: 20px;
-      height: 20px;
-      margin-right: 10px;
-    }
-    </style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #3d2924;
+            color: #FFFFFF;
+            display: flex;
+            height: 100vh;
+        }
 
+        /* Sidebar Styling */
+        .sidebar {
+            width: 280px;
+            background-color: #2b1e1a;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 0;
+        }
+        .sidebar img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 3px solid #8d6e63;
+            margin-bottom: 15px;
+        }
+        .sidebar h2 {
+            font-size: 18px;
+            margin-bottom: 30px;
+            color: #d7ccc8;
+        }
+        .menu-item {
+            width: 100%;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            font-size: 16px;
+            color: #d7ccc8;
+            border-left: 3px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .menu-item:hover {
+            background-color: #4e342e;
+            border-left: 3px solid #ffab91;
+        }
+
+        /* Main Content Styling */
+        .main-content {
+            flex: 1;
+            background-color: #4e342e;
+            padding: 30px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header Styling */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .notification {
+            background-color: #8d6e63;
+            padding: 15px 20px;
+            border-radius: 10px;
+            font-size: 14px;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .notification i {
+            font-size: 18px;
+        }
+
+        /* Cards Layout */
+        .cards-container {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .card {
+            flex: 1;
+            min-width: 280px;
+            background-color: #d7ccc8;
+            color: #3e2723;
+            padding: 20px;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .card h2 {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        /* Charts and Threat Feed */
+        .chart-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .chart, .threat-feed {
+            flex: 1;
+            min-width: 300px;
+            background-color: #d7ccc8;
+            color: #3e2723;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .donut-chart {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: conic-gradient(#3e2723 0% 35%, #8d6e63 35% 70%, #d7ccc8 70% 100%);
+            margin: 20px auto;
+        }
+
+        /* Buttons */
+        .buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            justify-content: center;
+        }
+        .button {
+            background-color: #8d6e63;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-size: 14px;
+            text-align: center;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .button:hover {
+            background-color: #ffab91;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 20px;
+            }
+            .chart-container {
+                flex-direction: column;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
     <div class="sidebar">
-        <img src="/static/photo/hwda pink.png" alt="">
-        <a href="{{ url_for('dashboard') }}" class="menu-item">
-            <img src="/static/photo/dashboard.png" alt="Dashboard Icon">
-            Dashboard
-        </a>
-        <a href="{{ url_for('risk_monitoring') }}" class="menu-item">
-            <img src="/static/photo/riskmonitor.png" alt="Risk Monitoring Icon">
-            Risk Monitoring
-        </a>
-        <a href="{{ url_for('threat_management') }}" class="menu-item">
-            <img src="/static/photo/ThreatManagement.png" alt="Threat Management Icon">
-            Threat Management
-        </a>
-        <a href="{{ url_for('risk_assessment') }}" class="menu-item">
-            <img src="/static/photo/RiskAssessment.png" alt="Risk Assessment Icon">
-            Risk Assessment
-        </a>
-        <a href="{{ url_for('asset_management') }}" class="menu-item">
-            <img src="/static/photo/assetManagement.png" alt="Asset Management Icon">
-            Asset Management
-        </a>
-        <a href="{{ url_for('reports') }}" class="menu-item active">
-            <img src="/static/photo/ReportsPage.png" alt="Reports Page Icon">
-            Reports Page
-        </a>
-        <a href="{{ url_for('mitigation_planning') }}" class="menu-item">
-            <img src="/static/photo/mitigationplan.png" alt="Mitigation Planning Icon">
-            Mitigation Planning
-        </a>
-        <a href="{{ url_for('settings') }}" class="menu-item">
-            <img src="/static/photo/settings.png" alt="Settings Icon">
-            Settings
-        </a>
-    </div>  
+        
+        <h2>Mrs. KHALZA</h2>
+        <div class="menu-item">Dashboard</div>
+        <div class="menu-item">Risk Monitoring</div>
+        <div class="menu-item">Threat Management</div>
+        <div class="menu-item">Risk Assessment</div>
+        <div class="menu-item">Asset Management</div>
+        <div class="menu-item">Reports Page</div>
+        <div class="menu-item">Mitigation Planning</div>
+        <div class="menu-item">Settings</div>
+        <div class="menu-item">Log Out</div>
+    </div>
+    <div class="container">
+        <div class="sidebar">
+            <img src="/static/photo/Fotoprofile.png" alt="Profile Picture">
+            <a href="{{ url_for('dashboard') }}" class="menu-item">
+                <img src="/static/photo/dashboard.png" alt="Dashboard Icon">
+                Dashboard
+            </a>
+            <a href="{{ url_for('risk_monitoring') }}" class="menu-item">
+                <img src="/static/photo/riskmonitor.png" alt="Risk Monitoring Icon">
+                Risk Monitoring
+            </a>
+            <a href="{{ url_for('threat_management') }}" class="menu-item">
+                <img src="/static/photo/ThreatManagement.png" alt="Threat Management Icon">
+                Threat Management
+            </a>
+            <a href="{{ url_for('risk_assessment') }}" class="menu-item">
+                <img src="/static/photo/RiskAssessment.png" alt="Risk Assessment Icon">
+                Risk Assessment
+            </a>
+            <a href="{{ url_for('asset_management') }}" class="menu-item">
+                <img src="/static/photo/assetManagement.png" alt="Asset Management Icon">
+                Asset Management
+            </a>
+            <a href="{{ url_for('reports') }}" class="menu-item active">
+                <img src="/static/photo/ReportsPage.png" alt="Reports Page Icon">
+                Reports Page
+            </a>
+            <a href="{{ url_for('mitigation_planning') }}" class="menu-item">
+                <img src="/static/photo/mitigationplan.png" alt="Mitigation Planning Icon">
+                Mitigation Planning
+            </a>
+            <a href="{{ url_for('settings') }}" class="menu-item">
+                <img src="/static/photo/settings.png" alt="Settings Icon">
+                Settings
+            </a>
+        </div>
+    <div class="main-content">
+        <div class="header">
+            <h1>Welcome back to your dashboard!</h1>
+            <div class="notification">
+                <i>🔔</i>
+                <span>Hi Khalza! You haven't completed all steps. Please check it!</span>
+            </div>
+        </div>
+        <div class="cards-container">
+            <div class="card">
+                <h2>Account Activity</h2>
+                <p>View your weekly activity summary here!</p>
+                <!-- Add a bar chart or activity tracking here -->
+            </div>
+            <div class="card">
+                <h2>Today's Date</h2>
+                <p>Tuesday, 28 January 2025</p>
+            </div>
+        </div>
+        <div class="chart-container">
+            <div class="threat-feed">
+                <h2>Real Time Threat Feed</h2>
+                <p>Threats like phishing and malware are being monitored.</p>
+                <!-- Add threat feed details here -->
+            </div>
+            <div class="chart">
+                <h2>Risk Distribution</h2>
+                <div class="donut-chart"></div>
+                <ul>
+                    <li>High: 35%</li>
+                    <li>Medium: 35%</li>
+                    <li>Low: 30%</li>
+                </ul>
+            </div>
+        </div>
+        <div class="buttons">
+            <div class="button">Add Asset</div>
+            <div class="button">Add Threat</div>
+            <div class="button">Assess Risk</div>
+            <div class="button">Generate Report</div>
+        </div>
+    </div>
 </body>
 </html>

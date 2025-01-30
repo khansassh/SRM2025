@@ -290,70 +290,76 @@ def download_report(report_id):
 
 @app.route('/risk-assessment', methods=['GET', 'POST'])
 def risk_assessment():
-    conn = None
-    cursor = None
     if request.method == 'POST':
+        conn, cursor = get_db_connection()
         try:
+            # Existing assessment save
             asset = request.form['asset']
             threat = request.form['threat']
             likelihood = request.form['likelihood']
             impact = request.form['impact']
 
-            # Get both connection and cursor from the tuple
-            conn, cursor = get_db_connection()
+            # Save assessment
             cursor.execute(
-                "INSERT INTO risk_assessments (asset, threat, likelihood, impact) VALUES (%s, %s, %s, %s)",
+                "INSERT INTO risk_assessments (asset, threat, likelihood, impact) "
+                "VALUES (%s, %s, %s, %s) RETURNING id",
                 (asset, threat, likelihood, impact)
             )
-            conn.commit()
-            flash('Risk assessment saved successfully!', 'success')
-        except Exception as e:
-            if conn:
-                conn.rollback()
-            flash(f'Error saving risk assessment: {str(e)}', 'error')
-        finally:
-            if cursor:
-                cursor.close()
-            if conn:
-                conn.close()
+            assessment_id = cursor.fetchone()[0]
 
-    # For rendering the form (GET request)
-    return render_template('RiskAssessment.html')
-@app.route('/risk-monitoring', methods=['GET', 'POST'])
+            # Calculate risk type
+            risk_type = calculate_risk_type(likelihood, impact)
+
+            # Create corresponding risk entry
+            cursor.execute(
+                "INSERT INTO risks (assessment_id, affected_asset, threat_name, risk_type) "
+                "VALUES (%s, %s, %s, %s)",
+                (assessment_id, asset, threat, risk_type)
+            )
+
+            conn.commit()
+            flash('Risk assessment saved and monitoring entry created!', 'success')
+        except Exception as e:
+            conn.rollback()
+            flash(f'Error: {str(e)}', 'error')
+        finally:
+            cursor.close()
+            conn.close()
+        return redirect(url_for('risk_assessment'))
+
+    # GET request handling
+    conn, cursor = get_db_connection()
+    cursor.execute("SELECT * FROM risk_assessments ORDER BY created_at DESC")
+    assessments = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    
+    return render_template('RiskAssessment.html', assessments=assessments)
+
+def calculate_risk_type(likelihood, impact):
+    likelihood_weight = {'Low': 1, 'Medium': 2, 'High': 3}
+    impact_weight = {'Low': 1, 'Medium': 2, 'High': 3}
+    score = likelihood_weight[likelihood] * impact_weight[impact]
+    
+    if score >= 6: return 'High Risk'
+    elif score >= 3: return 'Medium Risk'
+    return 'Low Risk'
+@app.route('/risk-monitoring')
 def risk_monitoring():
     conn, cursor = get_db_connection()
     
-    if request.method == 'POST':
-        try:
-            # Extract form data
-            file_id = request.form['file_id']
-            affected_asset = request.form['affected_asset']
-            threat_name = request.form['threat_name']
-            file_size = request.form['file_size']
-            risk_type = request.form['risk_type']
-
-            cursor.execute(
-                "INSERT INTO risks (file_id, affected_asset, threat_name, file_size, risk_type) "
-                "VALUES (%s, %s, %s, %s, %s)",
-                (file_id, affected_asset, threat_name, file_size, risk_type)
-            )
-            conn.commit()
-            flash('Risk entry added successfully!', 'success')
-        except Exception as e:
-            conn.rollback()
-            flash(f'Error saving risk entry: {str(e)}', 'error')
-    
-    # Get all risks
+    # Get all risks including assessments
     cursor.execute("""
-        SELECT id, file_id, affected_asset, threat_name, 
-               to_char(detected_time, 'HH12:MI AM') as time,
-               file_size, risk_type 
-        FROM risks 
-        ORDER BY detected_time DESC
+        SELECT r.id, r.file_id, r.affected_asset, r.threat_name,
+               COALESCE(to_char(r.detected_time, 'HH12:MI AM'), 'Assessment') as time,
+               r.file_size, r.risk_type, ra.likelihood, ra.impact
+        FROM risks r
+        LEFT JOIN risk_assessments ra ON r.assessment_id = ra.id
+        ORDER BY COALESCE(r.detected_time, ra.created_at) DESC
     """)
     risks = cursor.fetchall()
     
-    # Get risk statistics for widgets
+    # Statistics
     cursor.execute("""
         SELECT 
             COUNT(*) FILTER (WHERE risk_type = 'High Risk') as high_risk,
@@ -366,9 +372,7 @@ def risk_monitoring():
     cursor.close()
     conn.close()
 
-    return render_template('RiskMonitoring.html', 
-                         risks=risks, 
-                         risk_stats=risk_stats)
+    return render_template('RiskMonitoring.html', risks=risks, risk_stats=risk_stats)
 
 @app.route('/settings')
 def settings():
