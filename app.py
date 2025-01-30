@@ -1,8 +1,7 @@
 import psycopg2
 from flask import Flask, render_template, request, redirect, url_for, flash
 import psycopg2.extras
-from werkzeug.security import generate_password_hash
-
+from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'  # Necessary for flash messages
@@ -23,8 +22,6 @@ def get_db_connection():
     return conn
 
 # Routes
-
-from werkzeug.security import generate_password_hash
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -51,9 +48,6 @@ def register():
     
     return render_template('register.html')
 
-
-from werkzeug.security import check_password_hash
-
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -76,8 +70,6 @@ def login():
             flash('Invalid credentials. Please try again.', 'error')
     
     return render_template('login.html')
-
-
 
 @app.route('/dashboard')
 def dashboard():
@@ -122,9 +114,40 @@ def signin():
     
     return render_template('signin.html')
 
-@app.route('/asset-management')
+@app.route('/asset-management', methods=['GET', 'POST'])
 def asset_management():
-    return render_template('AssetManagement.html')
+    conn = get_db_connection()
+    
+    if request.method == 'POST':
+        try:
+            asset_name = request.form['asset_name']
+            asset_type = request.form['asset_type']
+            description = request.form['description']
+            criticality_level = request.form['criticality_level']
+            owner = request.form['owner']
+
+            cursor = conn.cursor()
+            cursor.execute(
+                "INSERT INTO assets (asset_name, asset_type, description, criticality_level, owner) "
+                "VALUES (%s, %s, %s, %s, %s)",
+                (asset_name, asset_type, description, criticality_level, owner)
+            )
+            conn.commit()
+            flash('Asset saved successfully!', 'success')
+        except Exception as e:
+            conn.rollback()
+            flash(f'Error saving asset: {str(e)}', 'error')
+        finally:
+            cursor.close()
+
+    # Get all assets for display
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM assets ORDER BY created_at DESC")
+    assets = cursor.fetchall()
+    cursor.close()
+    conn.close()
+
+    return render_template('AssetManagement.html', assets=assets)
 
 @app.route('/mitigation-planning')
 def mitigation_planning():

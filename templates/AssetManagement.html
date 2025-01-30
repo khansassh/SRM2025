@@ -213,54 +213,63 @@
       <!-- Form Section -->
       <div class="form-section">
         <h3>Asset Management Form</h3>
-        <div class="form-group">
-          <label for="asset-name">Asset Name:</label>
-          <input type="text" id="asset-name" placeholder="E.g., 'Database Server 1'">
-        </div>
-        <div class="form-group">
-          <label for="asset-type">Asset Type:</label>
-          <select id="asset-type">
-            <option>IT System</option>
-            <option>Application</option>
-            <option>Data</option>
-            <option>Hardware</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="description">Description:</label>
-          <textarea id="description" placeholder="Enter additional details here..."></textarea>
-        </div>
-        <div class="form-group">
-          <label for="criticality-level">Criticality Level:</label>
-          <select id="criticality-level">
-            <option>Low</option>
-            <option>Moderate</option>
-            <option>High</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="owner">Owner:</label>
-          <input type="text" id="owner" placeholder="E.g., 'IT Department'">
-        </div>
-        <div class="buttons">
-          <button>Edit</button>
-          <button>Delete</button>
-          <button>Save</button>
-        </div>
+        <form method="POST" action="{{ url_for('asset_management') }}">
+          <div class="form-group">
+            <label for="asset-name">Asset Name:</label>
+            <input type="text" id="asset-name" name="asset_name" required 
+                   placeholder="E.g., 'Database Server 1'">
+          </div>
+          <div class="form-group">
+            <label for="asset-type">Asset Type:</label>
+            <select id="asset-type" name="asset_type" required>
+              <option>IT System</option>
+              <option>Application</option>
+              <option>Data</option>
+              <option>Hardware</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="description">Description:</label>
+            <textarea id="description" name="description" 
+                      placeholder="Enter additional details here..."></textarea>
+          </div>
+          <div class="form-group">
+            <label for="criticality-level">Criticality Level:</label>
+            <select id="criticality-level" name="criticality_level" required>
+              <option>Low</option>
+              <option>Moderate</option>
+              <option>High</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="owner">Owner:</label>
+            <input type="text" id="owner" name="owner" required 
+                   placeholder="E.g., 'IT Department'">
+          </div>
+          <div class="buttons">
+            <button type="submit">Save</button>
+          </div>
+        </form>
       </div>
 
       <!-- Search Section -->
       <div class="search-section">
-        <h3>Search</h3>
+        <h3>Search Assets</h3>
         <div class="search-bar">
-          <input type="text" id="search-input" placeholder="Search threats...">
+          <input type="text" id="search-input" placeholder="Search assets...">
           <img src="/static/photo/search.png" alt="">
         </div>
         <ul class="search-results" id="search-results">
-          <li>Phishing Attack</li>
-          <li>Malware Infection</li>
-          <li>Insider Threats</li>
-          <li>Credential Stuffing</li>
+          {% if assets %}
+            {% for asset in assets %}
+              <li>
+                {{ asset[1] }} ({{ asset[2] }}) - {{ asset[4] }}<br>
+                <small>Owner: {{ asset[5] }}</small>
+              </li>
+            {% endfor %}
+          {% else %}
+            <li>No assets found</li>
+          {% endif %}
         </ul>
       </div>
     </div>
@@ -268,21 +277,17 @@
   <script>
     const searchInput = document.getElementById('search-input');
     const searchResults = document.getElementById('search-results');
-    const threats = [
-      'Phishing Attack',
-      'Malware Infection',
-      'Insider Threats',
-      'Credential Stuffing',
-    ];
+    const assets = Array.from(document.querySelectorAll('#search-results li'))
+                       .map(li => li.textContent);
 
     searchInput.addEventListener('input', () => {
       const query = searchInput.value.toLowerCase();
       searchResults.innerHTML = '';
-      threats
-        .filter(threat => threat.toLowerCase().includes(query))
-        .forEach(filteredThreat => {
+      assets
+        .filter(asset => asset.toLowerCase().includes(query))
+        .forEach(filteredAsset => {
           const listItem = document.createElement('li');
-          listItem.textContent = filteredThreat;
+          listItem.innerHTML = filteredAsset;
           searchResults.appendChild(listItem);
         });
     });
