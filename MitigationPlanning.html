@@ -21,7 +21,11 @@
       padding: 20px;
       box-sizing: border-box;
     }
-
+    .sidebar h2 {
+      font-size: 18px;
+      margin-bottom: 20px;
+      color: #d9c1b8;
+    }
     .menu-item {
       color: #d9c1b8;
       font-size: 16px;
@@ -31,6 +35,7 @@
       align-items: center;
       cursor: pointer;
       border-radius: 5px;
+      text-decoration: none;
     }
     .menu-item:hover,
     .menu-item.active {
@@ -41,15 +46,15 @@
       height: 20px;
       margin-right: 10px;
     }
-        .main-content {
-            background-color: #D6C0B3; 
-            padding: 20px;
-            width: 75%;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-        h2 {
-            margin-top: 0;
+    .main-content {
+        background-color: #d4b59b; 
+        padding: 20px;
+        width: 75%;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+        margin-top: 0;
         }
         .button {
             background-color: #8B5A2B;
@@ -61,7 +66,7 @@
             border-radius: 5px;
         }
         .button:hover {
-            background-color: #7A4A2A; /* Darker brown */
+            background-color: #7A4A2A; 
         }
         .form-group {
             margin-bottom: 15px;
@@ -83,53 +88,53 @@
         }
         .progress div {
             height: 20px;
-            background-color: #8B5A2B; /* Medium brown */
-            width: 70%; /* Change this value to represent progress */
+            background-color: #8B5A2B;  
             border-radius: 5px;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="sidebar">
-          <img src="photo/hwda pink.png" alt="">
-          <div class="menu-item">
-            <img src="photo/dashboard.png" alt="Dashboard Icon">
-            Dashboard
-          </div>
-          <div class="menu-item">
-            <img src="photo/riskmonitor.png" alt="Risk Monitoring Icon">
-            Risk Monitoring
-          </div>
-          <div class="menu-item">
-            <img src="photo/ThreatManagement.png" alt="Threat Management Icon">
-            Threat Management
-          </div>
-          <div class="menu-item">
-            <img src="photo/RiskAssessment.png" alt="Risk Assessment Icon">
-            Risk Assessment
-          </div>
-          <div class="menu-item">
-            <img src="photo/assetManagement.png" alt="Asset Management Icon">
-            Asset Management
-          </div>
-          <div class="menu-item">
-            <img src="photo/ReportsPage.png" alt="Reports Page Icon">
-            Reports Page
-          </div>
-          <div class="menu-item active">
-            <img src="photo/mitigationplan.png" alt="Mitigation Planning Icon">
-            Mitigation Planning
-          </div>
-          <div class="menu-item">
-            <img src="photo/settings.png" alt="Settings Icon">
-            Settings
-          </div>
-          <div class="menu-item">
-            <img src="photo/logout.png" alt="Log Out Icon">
-            Log Out
-          </div>
-        </div>
+  <div class="container">
+    <div class="sidebar">
+      <img src="photo/hwda pink.png" alt="">
+      <a href="dashboard.html" class="menu-item">
+        <img src="photo/dashboard.png" alt="Dashboard Icon">
+        Dashboard
+      </a>
+      <a href="riskmonitoring.html" class="menu-item">
+        <img src="photo/riskmonitor.png" alt="Risk Monitoring Icon">
+        Risk Monitoring
+      </a>
+      <a href="threatmanagement.html" class="menu-item">
+        <img src="photo/ThreatManagement.png" alt="Threat Management Icon">
+        Threat Management
+      </a>
+      <a href="riskassessment.html" class="menu-item">
+        <img src="photo/RiskAssessment.png" alt="Risk Assessment Icon">
+        Risk Assessment
+      </a>
+      <a href="assetmanagement.html" class="menu-item">
+        <img src="photo/assetManagement.png" alt="Asset Management Icon">
+        Asset Management
+      </a>
+      <a href="reportspage.html" class="menu-item">
+        <img src="photo/ReportsPage.png" alt="Reports Page Icon">
+        Reports Page
+      </a>
+      <a href="MitigationPlanning.html" class="menu-item active">
+        <img src="photo/mitigationplan.png" alt="Mitigation Planning Icon">
+        Mitigation Planning
+      </a>
+      <a href="settings.html" class="menu-item">
+        <img src="photo/settings.png" alt="Settings Icon">
+        Settings
+      </a>
+      <a href="logout.html" class="menu-item">
+        <img src="photo/logout.png" alt="Log Out Icon">
+        Log Out
+      </a>
+    </div>
+    
         <div class="main-content">
             <h2>Mitigation Planning Page</h2>
             <div class="form-group">
