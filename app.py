@@ -3,7 +3,7 @@ from flask import Flask, render_template
 import psycopg2.extras
 
 
-app = Flask(__name__)
+app = Flask(_name_)
 
 @app.route('/login')
 def login():
@@ -13,7 +13,7 @@ def login():
 def signin():
     return render_template('signin.html')
 
-@app.route('/asset-management')
+@app.route('/AssetManagement.html')
 def asset_management():
     return render_template('AssetManagement.html')
 
@@ -75,5 +75,5 @@ def home():
     
     return render_template('dashboard.html', data=result)
 
-if __name__ == '__main__':
+if _name_ == '_main_':
     app.run(debug=True)

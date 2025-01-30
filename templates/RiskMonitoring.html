@@ -13,12 +13,13 @@
     }
     .container {
       display: flex;
+      width: 100%;
+      height: flex;
     }
-    /* Sidebar */
     .sidebar {
       width: 250px;
       background-color: #3b251c;
-      height: 100vh;
+      height: flex; /* Fixed sidebar height */
       padding: 20px;
       box-sizing: border-box;
     }
@@ -159,45 +160,41 @@
   </style>
 </head>
 <body>
-  <div class="container">
+<div class="container">
     <div class="sidebar">
-      <img src="/static/photo/hwda pink.png" alt="">
-      <a href="dashboard.html" class="menu-item">
-        <img src="/static/photo/dashboard.png" alt="Dashboard Icon">
-        Dashboard
-      </a>
-      <a href="riskmonitoring.html" class="menu-item active">
-        <img src="/static/photo/riskmonitor.png" alt="Risk Monitoring Icon">
-        Risk Monitoring
-      </a>
-      <a href="threatmanagement.html" class="menu-item">
-        <img src="/static/photo/ThreatManagement.png" alt="Threat Management Icon">
-        Threat Management
-      </a>
-      <a href="riskassessment.html" class="menu-item">
-        <img src="/static/photo/RiskAssessment.png" alt="Risk Assessment Icon">
-        Risk Assessment
-      </a>
-      <a href="assetmanagement.html" class="menu-item">
-        <img src="/static/photo/assetManagement.png" alt="Asset Management Icon">
-        Asset Management
-      </a>
-      <a href="reportspage.html" class="menu-item">
-        <img src="/static/photo/ReportsPage.png" alt="Reports Page Icon">
-        Reports Page
-      </a>
-      <a href="mitigationplan.html" class="menu-item">
-        <img src="/static/photo/mitigationplan.png" alt="Mitigation Planning Icon">
-        Mitigation Planning
-      </a>
-      <a href="settings.html" class="menu-item">
-        <img src="/static/photo/settings.png" alt="Settings Icon">
-        Settings
-      </a>
-      <a href="logout.html" class="menu-item">
-        <img src="/static/photo/logout.png" alt="Log Out Icon">
-        Log Out
-      </a>
+        <img src="/static/photo/hwda pink.png" alt="">
+        <a href="{{ url_for('dashboard') }}" class="menu-item">
+            <img src="/static/photo/dashboard.png" alt="Dashboard Icon">
+            Dashboard
+        </a>
+        <a href="{{ url_for('risk_monitoring') }}" class="menu-item">
+            <img src="/static/photo/riskmonitor.png" alt="Risk Monitoring Icon">
+            Risk Monitoring
+        </a>
+        <a href="{{ url_for('threat_management') }}" class="menu-item">
+            <img src="/static/photo/ThreatManagement.png" alt="Threat Management Icon">
+            Threat Management
+        </a>
+        <a href="{{ url_for('risk_assessment') }}" class="menu-item">
+            <img src="/static/photo/RiskAssessment.png" alt="Risk Assessment Icon">
+            Risk Assessment
+        </a>
+        <a href="{{ url_for('asset_management') }}" class="menu-item">
+            <img src="/static/photo/assetManagement.png" alt="Asset Management Icon">
+            Asset Management
+        </a>
+        <a href="{{ url_for('reports') }}" class="menu-item active">
+            <img src="/static/photo/ReportsPage.png" alt="Reports Page Icon">
+            Reports Page
+        </a>
+        <a href="{{ url_for('mitigation_planning') }}" class="menu-item">
+            <img src="/static/photo/mitigationplan.png" alt="Mitigation Planning Icon">
+            Mitigation Planning
+        </a>
+        <a href="{{ url_for('settings') }}" class="menu-item">
+            <img src="/static/photo/settings.png" alt="Settings Icon">
+            Settings
+        </a>
     </div>
 
     <!-- Main Content -->
