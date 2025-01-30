@@ -1,14 +1,11 @@
 import psycopg2
 from flask import Flask, render_template, request, redirect, url_for, flash
 import psycopg2.extras
+from werkzeug.security import generate_password_hash
 
-<<<<<<< Updated upstream
 
-app = Flask(_name_)
-=======
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'  # Necessary for flash messages
->>>>>>> Stashed changes
 
 # Database connection setup
 DB_HOST = "localhost"
@@ -26,40 +23,81 @@ def get_db_connection():
     return conn
 
 # Routes
-@app.route('/')
-def home():
-    return render_template('dashboard.html')
+
+from werkzeug.security import generate_password_hash
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        username = request.form['username']
+        email = request.form['email']
+        password = request.form['password']
+        
+        # Hash the password before storing it in the database
+        password_hash = generate_password_hash(password)
+        
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        
+        # Insert the user into the database
+        cursor.execute("INSERT INTO users (username, email, password_hash) VALUES (%s, %s, %s)",
+                       (username, email, password_hash))
+        
+        conn.commit()
+        cursor.close()
+        conn.close()
+        
+        return redirect(url_for('login'))
+    
+    return render_template('register.html')
+
+
+from werkzeug.security import check_password_hash
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        email = request.form['email']
+        username = request.form['username']
         password = request.form['password']
         
         conn = get_db_connection()
         cursor = conn.cursor()
         
-        # Check if the user exists
-        cursor.execute("SELECT * FROM users WHERE email = %s AND password = %s", (email, password))
+        # Fetch the user from the database
+        cursor.execute("SELECT * FROM users WHERE username = %s", (username,))
         user = cursor.fetchone()
         
         cursor.close()
         conn.close()
         
-        if user:
+        if user and check_password_hash(user[3], password):  # user[3] is the hashed password column
             return redirect(url_for('dashboard'))  # Redirect to dashboard on successful login
         else:
             flash('Invalid credentials. Please try again.', 'error')
     
     return render_template('login.html')
 
+
+
+@app.route('/dashboard')
+def dashboard():
+    return render_template('dashboard.html')
+
 @app.route('/signin', methods=['GET', 'POST'])
 def signin():
     if request.method == 'POST':
-        fullname = request.form['fullname']
-        email = request.form['email']
-        password = request.form['password']
-        
+        try:
+            username = request.form['username']  # Capture the username
+            fullname = request.form['fullname']
+            email = request.form['email']
+            password = request.form['password']
+        except KeyError as e:
+            flash(f'Missing form field: {e}', 'error')
+            return redirect(url_for('signin'))
+
+        # Hash the password before saving it
+        hashed_password = generate_password_hash(password)
+
         conn = get_db_connection()
         cursor = conn.cursor()
         
@@ -71,9 +109,9 @@ def signin():
             flash('Email already registered. Please log in.', 'warning')
             return redirect(url_for('login'))
         
-        # Insert new user into the database
-        cursor.execute("INSERT INTO users (fullname, email, password) VALUES (%s, %s, %s)", 
-                       (fullname, email, password))
+        # Insert new user into the database, with hashed password
+        cursor.execute("INSERT INTO users (username, fullname, email, password_hash) VALUES (%s, %s, %s, %s)", 
+                       (username, fullname, email, hashed_password))
         conn.commit()
         
         cursor.close()
@@ -83,17 +121,6 @@ def signin():
         return redirect(url_for('login'))
     
     return render_template('signin.html')
-
-<<<<<<< Updated upstream
-@app.route('/AssetManagement.html')
-def asset_management():
-    return render_template('AssetManagement.html')
-
-=======
->>>>>>> Stashed changes
-@app.route('/dashboard')
-def dashboard():
-    return render_template('dashboard.html')
 
 @app.route('/asset-management')
 def asset_management():
@@ -123,40 +150,5 @@ def settings():
 def threat_management():
     return render_template('ThreatManagement.html')
 
-<<<<<<< Updated upstream
-DB_HOST = "localhost"
-DB_NAME = "khalza"
-DB_USER = "postgres"
-DB_PASS = "ilovemoon19"
-
-# Function to get a database connection
-def get_db_connection():
-    conn = psycopg2.connect(
-        host=DB_HOST,
-        database=DB_NAME,
-        user=DB_USER,
-        password=DB_PASS
-    )
-    return conn
-
-@app.route('/')
-def home():
-    # Example of how to use the database connection
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    
-    # Example query
-    cursor.execute("SELECT * FROM some_table")
-    result = cursor.fetchall()
-    
-    cursor.close()
-    conn.close()  # Ensure the connection is closed after use
-    
-    return render_template('dashboard.html', data=result)
-
-if _name_ == '_main_':
-    app.run(debug=True)
-=======
 if __name__ == '__main__':
     app.run(debug=True)
->>>>>>> Stashed changes
