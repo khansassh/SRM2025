@@ -20,41 +20,43 @@
         }
 
         /* Sidebar Styling */
-        .sidebar {
-            width: 280px;
-            background-color: #2b1e1a;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px 0;
-        }
-        .sidebar img {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            border: 3px solid #8d6e63;
-            margin-bottom: 15px;
-        }
-        .sidebar h2 {
-            font-size: 18px;
-            margin-bottom: 30px;
-            color: #d7ccc8;
-        }
-        .menu-item {
-            width: 100%;
-            padding: 15px 20px;
-            display: flex;
-            align-items: center;
-            font-size: 16px;
-            color: #d7ccc8;
-            border-left: 3px solid transparent;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        .menu-item:hover {
-            background-color: #4e342e;
-            border-left: 3px solid #ffab91;
-        }
+        .container {
+      display: flex;
+      width: 100%;
+      height: flex;
+    }
+    .sidebar {
+      width: 250px;
+      background-color: #3b251c;
+      height: flex; /* Fixed sidebar height */
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    .sidebar h2 {
+      font-size: 18px;
+      margin-bottom: 20px;
+      color: #d9c1b8;
+    }
+    .menu-item {
+      color: #d9c1b8;
+      font-size: 16px;
+      margin: 10px 0;
+      padding: 10px;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      border-radius: 5px;
+      text-decoration: none;
+    }
+    .menu-item:hover,
+    .menu-item.active {
+      background-color: #7b5a4b;
+    }
+    .menu-item img {
+      width: 20px;
+      height: 20px;
+      margin-right: 10px;
+    }
 
         /* Main Content Styling */
         .main-content {
@@ -158,6 +160,12 @@
         .button:hover {
             background-color: #ffab91;
         }
+        .buttons a.button {
+        text-decoration: none;
+        /* Add these to maintain link behavior */
+        display: inline-block;
+        color: inherit;
+        }
 
         /* Responsive Design */
         @media (max-width: 768px) {
@@ -173,23 +181,10 @@
     </style>
 </head>
 <body>
-    <div class="sidebar">
-        
-        <h2>Mrs. KHALZA</h2>
-        <div class="menu-item">Dashboard</div>
-        <div class="menu-item">Risk Monitoring</div>
-        <div class="menu-item">Threat Management</div>
-        <div class="menu-item">Risk Assessment</div>
-        <div class="menu-item">Asset Management</div>
-        <div class="menu-item">Reports Page</div>
-        <div class="menu-item">Mitigation Planning</div>
-        <div class="menu-item">Settings</div>
-        <div class="menu-item">Log Out</div>
-    </div>
     <div class="container">
         <div class="sidebar">
             <img src="/static/photo/Fotoprofile.png" alt="Profile Picture">
-            <a href="{{ url_for('dashboard') }}" class="menu-item">
+            <a href="{{ url_for('dashboard') }}" class="menu-item active">
                 <img src="/static/photo/dashboard.png" alt="Dashboard Icon">
                 Dashboard
             </a>
@@ -209,7 +204,7 @@
                 <img src="/static/photo/assetManagement.png" alt="Asset Management Icon">
                 Asset Management
             </a>
-            <a href="{{ url_for('reports') }}" class="menu-item active">
+            <a href="{{ url_for('reports') }}" class="menu-item">
                 <img src="/static/photo/ReportsPage.png" alt="Reports Page Icon">
                 Reports Page
             </a>
@@ -258,10 +253,10 @@
             </div>
         </div>
         <div class="buttons">
-            <div class="button">Add Asset</div>
-            <div class="button">Add Threat</div>
-            <div class="button">Assess Risk</div>
-            <div class="button">Generate Report</div>
+            <a href="{{ url_for('asset_management') }}" class="button">Add Asset</a>
+            <a href="{{ url_for('threat_management') }}" class="button">Add Threat</a>
+            <a href="{{ url_for('risk_assessment') }}" class="button">Assess Risk</a>
+            <a href="{{ url_for('reports') }}" class="button">Generate Report</a>
         </div>
     </div>
 </body>
