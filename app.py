@@ -1,13 +1,14 @@
 import os
 import io
-from flask import Flask, render_template, request, redirect, url_for, flash, send_file
+import csv
+import json
+from flask import Flask, render_template, request, redirect, url_for, flash, send_file, jsonify
 import psycopg2
 import psycopg2.extras
 from werkzeug.security import generate_password_hash, check_password_hash
 from reportlab.pdfgen import canvas
 from docx import Document
 from datetime import datetime
-
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'  # Necessary for flash messages
 
@@ -28,6 +29,15 @@ def get_db_connection():
     cursor = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
     return conn, cursor
 
+def log_activity(user_id, description):
+    conn, cursor = get_db_connection()
+    cursor.execute(
+        "INSERT INTO activity_logs (user_id, description) VALUES (%s, %s)",
+        (user_id, description)
+    )
+    conn.commit()
+    cursor.close()
+    conn.close()
 # Routes
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -49,6 +59,14 @@ def register():
         conn.commit()
         cursor.close()
         conn.close()
+
+        # In both your dashboard and dashboard_data routes, change the asset query to:
+        cursor.execute("""
+            SELECT 
+                COUNT(*) as total,
+                COALESCE(SUM(CASE WHEN critical THEN 1 ELSE 0 END), 0) as critical 
+            FROM assets
+        """)
         
         return redirect(url_for('login'))
     
@@ -76,9 +94,119 @@ def login():
     
     return render_template('login.html')
 
+@app.route('/api/dashboard-data')
+def dashboard_data():
+    conn, cursor = get_db_connection()
+    
+    try:
+        # Risk data
+        cursor.execute("SELECT risk_type, COUNT(*) as count FROM risks GROUP BY risk_type")
+        risk_data = cursor.fetchall()
+
+        # Threats
+        cursor.execute("SELECT name, severity, created_at FROM threats ORDER BY created_at DESC LIMIT 5")
+        threats = cursor.fetchall()
+
+        # Assets
+        cursor.execute("""
+            SELECT 
+                COUNT(*) as total,
+                SUM(CASE WHEN critical THEN 1 ELSE 0 END) as critical 
+            FROM assets
+        """)
+        assets = cursor.fetchone()
+
+        return jsonify({
+            'risk_data': [dict(r) for r in risk_data],
+            'threats': [dict(t) for t in threats],
+            'assets': dict(assets)
+        })
+    finally:
+        cursor.close()
+        conn.close()
+
 @app.route('/dashboard')
 def dashboard():
-    return render_template('dashboard.html')
+    conn, cursor = get_db_connection()
+
+    # Pass the Python OBJECT, not JSON string
+    
+    # Get user profile data
+    cursor.execute("SELECT * FROM users WHERE id = %s", (1,))
+    user = cursor.fetchone()
+    
+    # Get risk distribution
+    cursor.execute("SELECT risk_type, COUNT(*) as count FROM risks GROUP BY risk_type")
+    risk_data = cursor.fetchall()
+    
+    # Get asset summary
+    cursor.execute("""
+        SELECT 
+            COUNT(*) as total,
+            SUM(CASE WHEN critical THEN 1 ELSE 0 END) as critical 
+        FROM assets
+    """)
+    assets = cursor.fetchone()
+    
+    # Get latest threats
+    cursor.execute("SELECT * FROM threats ORDER BY created_at DESC LIMIT 5")
+    threats = cursor.fetchall()
+
+    def dashboard():
+        risk_data = [
+            {"risk_type": "High", "count": 5},
+            {"risk_type": "Medium", "count": 10},
+            {"risk_type": "Low", "count": 15}
+        ]
+    
+    cursor.close()
+    conn.close()
+    
+    return render_template('dashboard.html', 
+                         user=user,
+                         risk_data=risk_data,
+                         threats=threats,
+                         assets=assets,  # Add this line
+                         risk_data_json=json.dumps([dict(r) for r in risk_data]))
+ 
+@app.route('/get-activity-log')
+def get_activity_log():
+    user_id = 1  # Replace this with the actual user ID from session or context
+    conn, cursor = get_db_connection()
+    cursor.execute(
+        "SELECT timestamp, description FROM activity_logs WHERE user_id = %s ORDER BY timestamp DESC LIMIT 10",
+        (user_id,)
+    )
+    activities = cursor.fetchall()
+    cursor.close()
+    conn.close()
+
+    activity_list = [{'timestamp': activity['timestamp'].strftime('%Y-%m-%d %H:%M'), 'description': activity['description']} for activity in activities]
+    
+    return jsonify(activity_list)
+
+@app.route('/download-activity-log')
+def download_activity_log():
+    user_id = 1  # Replace this with the actual user ID
+    conn, cursor = get_db_connection()
+    cursor.execute(
+        "SELECT timestamp, description FROM activity_logs WHERE user_id = %s ORDER BY timestamp DESC",
+        (user_id,)
+    )
+    activities = cursor.fetchall()
+    cursor.close()
+    conn.close()
+
+    # Generate a CSV file
+    output = io.StringIO()
+    writer = csv.writer(output)
+    writer.writerow(['Timestamp', 'Description'])
+    for activity in activities:
+        writer.writerow([activity['timestamp'], activity['description']])
+    output.seek(0)
+
+    # Use 'as_attachment=True' and specify 'filename'
+    return send_file(io.BytesIO(output.getvalue().encode()), as_attachment=True, download_name='activity_log.csv')
 
 @app.route('/signin', methods=['GET', 'POST'])
 def signin():
@@ -130,8 +258,9 @@ def asset_management():
             criticality_level = request.form['criticality_level']
             owner = request.form['owner']
 
+            # MODIFY THIS LINE (original was 'asset')
             cursor.execute(
-                "INSERT INTO assets (asset_name, asset_type, description, criticality_level, owner) "
+                "INSERT INTO assets (asset_name, asset_type, description, criticality_level, owner) "  # Changed
                 "VALUES (%s, %s, %s, %s, %s)",
                 (asset_name, asset_type, description, criticality_level, owner)
             )
@@ -141,8 +270,8 @@ def asset_management():
             conn.rollback()
             flash(f'Error saving asset: {str(e)}', 'error')
     
-    # Get all assets for display
-    cursor.execute("SELECT * FROM assets ORDER BY created_at DESC")
+    # MODIFY THIS LINE TOO (original was 'asset')
+    cursor.execute("SELECT * FROM assets ORDER BY created_at DESC")  # Changed
     assets = cursor.fetchall()
     cursor.close()
     conn.close()
@@ -380,7 +509,7 @@ def settings():
 
 @app.route('/threat-management', methods=['GET', 'POST'])
 def threat_management():
-    conn, cursor = get_db_connection()  # Use the updated connection function
+    conn, cursor = get_db_connection()
     
     # Handle form submission
     if request.method == 'POST':
@@ -403,11 +532,33 @@ def threat_management():
     
     # Get threats for real-time feed
     cursor.execute("SELECT * FROM threats ORDER BY created_at DESC")
-    threats = cursor.fetchall()  # This will now return dictionaries
+    threats = cursor.fetchall()
     cursor.close()
     conn.close()
     
+    print("Fetched threats:", threats)  # Debugging line
+
     return render_template('ThreatManagement.html', threats=threats)
 
+@app.route('/threat-details/<int:threat_id>')
+def threat_details(threat_id):
+    conn, cursor = get_db_connection()
+    cursor.execute("SELECT * FROM threats WHERE id = %s", (threat_id,))
+    threat = cursor.fetchone()
+    cursor.close()
+    conn.close()
+
+    print("Fetched threat details for ID", threat_id, ":", threat)  # Debugging line
+
+    if threat:
+        return jsonify({
+            'threat_name': threat['threat_name'],
+            'threat_source': threat['threat_source'],
+            'description': threat['description'],
+            'severity': threat['severity'],
+            'created_at': threat['created_at'].strftime('%Y-%m-%d %H:%M:%S UTC')
+        })
+    else:
+        return jsonify({'error': 'Threat not found'}), 404
 if __name__ == '__main__':
     app.run(debug=True)

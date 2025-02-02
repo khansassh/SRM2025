@@ -5,185 +5,198 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
     <style>
-        /* Reset and Base Styles */
+        :root {
+            --primary-bg: #2a1a12;
+            --secondary-bg: #3b251c;
+            --accent: #7b5a4b;
+            --text-primary: #e6d2c5;
+            --text-secondary: #d9c1b8;
+            --chart-grid: #4d342a;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            transition: all 0.3s ease;
         }
+
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: #3d2924;
-            color: #FFFFFF;
-            display: flex;
-            height: 100vh;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background-color: var(--primary-bg);
+            color: var(--text-primary);
         }
 
-        /* Sidebar Styling */
         .container {
-      display: flex;
-      width: 100%;
-      height: flex;
-    }
-    .sidebar {
-      width: 250px;
-      background-color: #3b251c;
-      height: flex; /* Fixed sidebar height */
-      padding: 20px;
-      box-sizing: border-box;
-    }
-    .sidebar h2 {
-      font-size: 18px;
-      margin-bottom: 20px;
-      color: #d9c1b8;
-    }
-    .menu-item {
-      color: #d9c1b8;
-      font-size: 16px;
-      margin: 10px 0;
-      padding: 10px;
-      display: flex;
-      align-items: center;
-      cursor: pointer;
-      border-radius: 5px;
-      text-decoration: none;
-    }
-    .menu-item:hover,
-    .menu-item.active {
-      background-color: #7b5a4b;
-    }
-    .menu-item img {
-      width: 20px;
-      height: 20px;
-      margin-right: 10px;
-    }
+            display: flex;
+            min-height: 100vh;
+        }
 
-        /* Main Content Styling */
+        .sidebar {
+            width: 280px;
+            background-color: var(--secondary-bg);
+            padding: 20px;
+            position: fixed;
+            height: 100%;
+            box-shadow: 4px 0 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .sidebar img[alt="Logo"] {
+            margin: 0 auto 30px;
+            display: block;
+            width: 70%;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+        }
+
+        .menu-item {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            margin: 12px 0;
+            padding: 14px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: transform 0.2s;
+        }
+
+        .menu-item:hover {
+            background-color: var(--accent);
+            transform: translateX(8px);
+        }
+
+        .menu-item.active {
+            background-color: var(--accent);
+            box-shadow: inset 4px 0 0 #d9c1b8;
+        }
+
         .main-content {
             flex: 1;
-            background-color: #4e342e;
-            padding: 30px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
+            padding: 2.5rem;
+            margin-left: 280px;
+            background-color: var(--primary-bg);
         }
 
-        /* Header Styling */
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-        }
-        .header h1 {
-            font-size: 24px;
-            font-weight: bold;
-        }
-        .notification {
-            background-color: #8d6e63;
-            padding: 15px 20px;
-            border-radius: 10px;
-            font-size: 14px;
-            color: #ffffff;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .notification i {
-            font-size: 18px;
-        }
-
-        /* Cards Layout */
         .cards-container {
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+            grid-auto-rows: minmax(300px, auto)
         }
+        
         .card {
-            flex: 1;
-            min-width: 280px;
-            background-color: #d7ccc8;
-            color: #3e2723;
-            padding: 20px;
-            border-radius: 10px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        .card h2 {
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 10px;
+            background: linear-gradient(145deg, #3b251c 0%, #2a1a12 100%);
+            padding: 1.8rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: 1px solid #4d342a;
         }
 
-        /* Charts and Threat Feed */
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+        }
+        .card p {
+            margin: 0.8rem 0;
+            padding: 0.5rem;
+            background: var(--secondary-bg);
+            border-radius: 4px;
+        }
+
         .chart-container {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 30px;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-        .chart, .threat-feed {
-            flex: 1;
-            min-width: 300px;
-            background-color: #d7ccc8;
-            color: #3e2723;
-            padding: 20px;
-            border-radius: 10px;
-        }
-        .donut-chart {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            background: conic-gradient(#3e2723 0% 35%, #8d6e63 35% 70%, #d7ccc8 70% 100%);
-            margin: 20px auto;
+            background: var(--secondary-bg);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-top: 2rem;
+            height: 400px; /* Fixed height for charts */
+            position: relative;
         }
 
-        /* Buttons */
-        .buttons {
-            display: flex;
-            gap: 15px;
-            margin-top: 20px;
-            justify-content: center;
+        #activity-log {
+            max-height: 300px;
+            overflow-y: auto;
+            padding-right: 1rem;
+            margin: 1rem 0;
         }
-        .button {
-            background-color: #8d6e63;
-            color: white;
-            padding: 12px 25px;
+
+        #activity-log::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        #activity-log::-webkit-scrollbar-track {
+            background: #2a1a12;
+        }
+
+        #activity-log::-webkit-scrollbar-thumb {
+            background: #7b5a4b;
+            border-radius: 4px;
+        }
+
+        .threat-item {
+            background: var(--secondary-bg);
+            padding: 1rem;
+            margin: 1rem 0;
             border-radius: 8px;
-            font-size: 14px;
-            text-align: center;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-        .button:hover {
-            background-color: #ffab91;
-        }
-        .buttons a.button {
-        text-decoration: none;
-        /* Add these to maintain link behavior */
-        display: inline-block;
-        color: inherit;
+            border-left: 4px solid #f44336;
         }
 
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 20px;
-            }
-            .chart-container {
-                flex-direction: column;
-            }
+        .button {
+            background: linear-gradient(45deg, #7b5a4b, #6b4e3b);
+            border: none;
+            padding: 14px 28px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .button:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .user-info img {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            border: 2px solid var(--text-primary);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            background: linear-gradient(45deg, #e6d2c5, #d9c1b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        h2 {
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 2px;
+            background: var(--accent);
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- Original Sidebar -->
         <div class="sidebar">
-            <img src="/static/photo/Fotoprofile.png" alt="Profile Picture">
+            <img src="/static/photo/hwda pink.png" alt="Logo">
             <a href="{{ url_for('dashboard') }}" class="menu-item active">
                 <img src="/static/photo/dashboard.png" alt="Dashboard Icon">
                 Dashboard
@@ -217,47 +230,157 @@
                 Settings
             </a>
         </div>
-    <div class="main-content">
-        <div class="header">
+
+        <div class="main-content">
+            <!-- Profile Header -->
+            <div class="profile-header">
+                <div class="user-info">
+                    <img src="/static/photo/Fotoprofile.png" alt="Profile">
+                    <h2>Mrs. Khalza</h2>
+                </div>
+            </div>
+
             <h1>Welcome back to your dashboard!</h1>
-            <div class="notification">
-                <i>🔔</i>
-                <span>Hi Khalza! You haven't completed all steps. Please check it!</span>
+            
+            <div class="cards-container">
+                <div class="card">
+                    <h2>Account Activity</h2>
+                    <ul id="activity-log">
+                        {% for activity in activities %}
+                        <li>{{ activity.timestamp }}: {{ activity.description }}</li>
+                        {% endfor %}
+                    </ul>
+                    <button onclick="downloadActivityLog()" class="button">Download Log</button>
+                </div>
+
+                <div class="card">
+                    <h2>Risk Overview</h2>
+                    {% for risk in risk_data %}
+                    <p>{{ risk.risk_type }}: {{ risk.count }} Risks</p>
+                    {% endfor %}
+                </div>
+
+                <div class="card">
+                    <h2>Asset Summary</h2>
+                    <p>Total Assets: {{ assets.total }}</p>
+                    <p>Critical Assets: {{ assets.critical }}</p>
+                </div>
+
+                <div class="card">
+                    <h2>Real-Time Threat Feed</h2>
+                    <div class="threat-feed">
+                        {% for threat in threats %}
+                        <div class="threat-item">
+                            <p><strong>{{ threat.name }}</strong> ({{ threat.severity }})</p>
+                            <p>{{ threat.created_at }}</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="card chart-container">
+                    <h2>Risk Distribution</h2>
+                    <canvas id="riskDistributionChart"></canvas>
+                </div>
             </div>
-        </div>
-        <div class="cards-container">
-            <div class="card">
-                <h2>Account Activity</h2>
-                <p>View your weekly activity summary here!</p>
-                <!-- Add a bar chart or activity tracking here -->
+
+            <div class="buttons">
+                <a href="{{ url_for('asset_management') }}" class="button">Add Asset</a>
+                <a href="{{ url_for('threat_management') }}" class="button">Add Threat</a>
+                <a href="{{ url_for('risk_assessment') }}" class="button">Assess Risk</a>
+                <a href="{{ url_for('reports') }}" class="button">Generate Report</a>
             </div>
-            <div class="card">
-                <h2>Today's Date</h2>
-                <p>Tuesday, 28 January 2025</p>
-            </div>
-        </div>
-        <div class="chart-container">
-            <div class="threat-feed">
-                <h2>Real Time Threat Feed</h2>
-                <p>Threats like phishing and malware are being monitored.</p>
-                <!-- Add threat feed details here -->
-            </div>
-            <div class="chart">
-                <h2>Risk Distribution</h2>
-                <div class="donut-chart"></div>
-                <ul>
-                    <li>High: 35%</li>
-                    <li>Medium: 35%</li>
-                    <li>Low: 30%</li>
-                </ul>
-            </div>
-        </div>
-        <div class="buttons">
-            <a href="{{ url_for('asset_management') }}" class="button">Add Asset</a>
-            <a href="{{ url_for('threat_management') }}" class="button">Add Threat</a>
-            <a href="{{ url_for('risk_assessment') }}" class="button">Assess Risk</a>
-            <a href="{{ url_for('reports') }}" class="button">Generate Report</a>
         </div>
     </div>
+
+    <script>
+        // Use Jinja2's tojson filter for proper JS conversion
+        const riskData = JSON.parse('{{ risk_data_json | safe }}');
+        let riskDistributionChart;
+        function downloadActivityLog() {
+        window.location.href = "{{ url_for('download_activity_log') }}";
+        }
+       
+
+        function initChart() {
+            const ctx = document.getElementById('riskDistributionChart').getContext('2d');
+            riskDistributionChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: riskData.map(item => item.risk_type),
+                    datasets: [{
+                        data: riskData.map(item => item.count),
+                        backgroundColor: ['#f44336', '#ffc107', '#4caf50'],
+                        borderColor: ['#fff'],
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { position: 'right', labels: { color: '#e6d2c5' } },
+                        tooltip: { bodyColor: '#e6d2c5' }
+                    }
+                }
+            });
+        }
+
+        // Real-time updates
+        // Replace both updateDashboard functions with this single version
+async function updateDashboard() {
+    try {
+        const response = await fetch('/api/dashboard-data');
+        const data = await response.json();
+        
+        // Update risk overview
+        document.querySelector('.card:nth-child(2)').innerHTML = `
+            <h2>Risk Overview</h2>
+            ${data.risk_data.map(r => `<p>${r.risk_type}: ${r.count} Risks</p>`).join('')}
+        `;
+
+        // Update assets
+        document.querySelector('.card:nth-child(3)').innerHTML = `
+            <h2>Asset Summary</h2>
+            <p>Total Assets: ${data.assets.total}</p>
+            <p>Critical Assets: ${data.assets.critical}</p>
+        `;
+
+        // Update threats
+        document.querySelector('.threat-feed').innerHTML = data.threats
+            .map(t => `
+                <div class="threat-item">
+                    <p><strong>${t.name}</strong> (${t.severity})</p>
+                    <p>${new Date(t.created_at).toLocaleString()}</p>
+                </div>
+            `).join('');
+
+            console.log("Fetched Risk Data:", data.risk_data);
+            if (!data.risk_data || data.risk_data.length === 0) {
+                console.warn("No risk data received!");
+                return;
+}
+
+        // Update chart
+        riskDistributionChart.data.labels = data.risk_data.map(r => r.risk_type);
+        riskDistributionChart.data.datasets[0].data = data.risk_data.map(r => r.count);
+        riskDistributionChart.update();
+
+        } catch (error) {
+        console.error('Error updating dashboard:', error);
+    }
+}
+
+        // Initial setup
+        document.addEventListener('DOMContentLoaded', () => {
+        const chartCanvas = document.getElementById('riskDistributionChart');
+        if (chartCanvas) {
+            initChart();
+            setInterval(updateDashboard, 10000);
+        } else {
+            console.error("Canvas element not found!");
+        }
+    });
+
+    </script>
 </body>
 </html>

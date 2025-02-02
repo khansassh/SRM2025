@@ -28,6 +28,48 @@
       margin-bottom: 20px;
       color: #d9c1b8;
     }
+    .modal {
+      display: none; /* Hidden by default */
+      position: fixed;
+      z-index: 1; /* Sit on top */
+      left: 0;
+      top: 0;
+      width: 100%; /* Full width */
+      height: 100%; /* Full height */
+      overflow: auto; /* Enable scroll if needed */
+      background-color: rgba(0, 0, 0, 0.5); /* Black w/ opacity */
+    }
+    .modal-content {
+      background-color: #4d3227;
+      margin: 15% auto; /* 15% from the top and centered */
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%; /* Could be more or less, depending on screen size */
+    }
+    .modal-content {
+    position: relative; /* Add this */
+    /* ... existing styles ... */
+    }
+
+    .close {
+        position: absolute;
+        top: 0;
+        right: 15px;
+        font-size: 28px;
+        /* ... existing styles ... */
+    }
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
+    .close:hover,
+    .close:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
     .menu-item {
       color: #d9c1b8;
       font-size: 16px;
@@ -236,15 +278,59 @@
         <h2 class="feed-title">Real-Time Threat Feed</h2>
         {% for threat in threats %}
         <div class="feed-item">
-          <h3>{{ threat.threat_name }}</h3> <!-- Access by name -->
+          <h3>{{ threat.threat_name }}</h3>
           <div class="details">
-            <span>{{ threat.created_at.strftime('%Y-%m-%d %H:%M:%S UTC') }}</span> <!-- Access by name -->
-            <button>See Details</button>
+            <span>{{ threat.created_at.strftime('%Y-%m-%d %H:%M:%S UTC') }}</span>
+            <<button onclick="showDetails({{ threat.id }})">See Details</button>
           </div>
         </div>
         {% endfor %}
       </div>
+      <div id="detailsModal" class="modal">
+        <div class="modal-content">
+          <span class="close" onclick="closeModal()">&times;</span>
+          <h2>Threat Details</h2>
+          <p id="threat-details"></p>
+        </div>
+      </div>
     </div>
   </div>
+  <script>
+    function closeModal() {
+    document.getElementById('detailsModal').style.display = 'none';
+    }
+   function showDetails(threatId) {
+    fetch(`/threat-details/${threatId}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log(data); // Debugging line to see what is returned
+            document.getElementById('threat-details').innerText = `
+                Threat Name: ${data.threat_name}
+                Source: ${data.threat_source}
+                Description: ${data.description}
+                Severity: ${data.severity}
+                Created At: ${data.created_at}
+            `;
+            document.getElementById('detailsModal').style.display = 'block';
+        })
+        .catch(error => {
+            console.error('There was a problem with the fetch operation:', error);
+            document.getElementById('threat-details').innerText = 'Failed to load threat details.';
+            document.getElementById('detailsModal').style.display = 'block';
+        });
+        // Close modal when clicking outside content
+      window.onclick = function(event) {
+          const modal = document.getElementById('detailsModal');
+          if (event.target === modal) {
+              closeModal();
+          }
+        }
+}
+  </script>
 </body>
 </html>
