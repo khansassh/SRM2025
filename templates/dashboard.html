@@ -29,52 +29,48 @@
 
         .container {
             display: flex;
-            min-height: 100vh;
+            width: 100%;
         }
 
         .sidebar {
-            width: 280px;
+            width: 250px;
             background-color: var(--secondary-bg);
             padding: 20px;
-            position: fixed;
-            height: 100%;
-            box-shadow: 4px 0 15px rgba(0, 0, 0, 0.2);
+            box-sizing: border-box;
         }
 
-        .sidebar img[alt="Logo"] {
-            margin: 0 auto 30px;
-            display: block;
-            width: 70%;
-            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+        .sidebar h2 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: var(--text-secondary);
         }
 
         .menu-item {
             color: var(--text-secondary);
-            font-size: 1rem;
-            margin: 12px 0;
-            padding: 14px;
+            font-size: 16px;
+            margin: 10px 0;
+            padding: 10px;
             display: flex;
             align-items: center;
             cursor: pointer;
-            border-radius: 8px;
+            border-radius: 5px;
             text-decoration: none;
-            transition: transform 0.2s;
         }
 
-        .menu-item:hover {
-            background-color: var(--accent);
-            transform: translateX(8px);
-        }
-
+        .menu-item:hover,
         .menu-item.active {
             background-color: var(--accent);
-            box-shadow: inset 4px 0 0 #d9c1b8;
+        }
+
+        .menu-item img {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
         }
 
         .main-content {
             flex: 1;
             padding: 2.5rem;
-            margin-left: 280px;
             background-color: var(--primary-bg);
         }
 
@@ -83,9 +79,9 @@
             grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
             gap: 2rem;
             margin: 2rem 0;
-            grid-auto-rows: minmax(300px, auto)
+            grid-auto-rows: minmax(300px, auto);
         }
-        
+
         .card {
             background: linear-gradient(145deg, #3b251c 0%, #2a1a12 100%);
             padding: 1.8rem;
@@ -110,7 +106,7 @@
             padding: 1.5rem;
             border-radius: 12px;
             margin-top: 2rem;
-            height: 400px; /* Fixed height for charts */
+            height: 400px;
             position: relative;
         }
 
@@ -126,11 +122,11 @@
         }
 
         #activity-log::-webkit-scrollbar-track {
-            background: #2a1a12;
+            background: var(--primary-bg);
         }
 
         #activity-log::-webkit-scrollbar-thumb {
-            background: #7b5a4b;
+            background: var(--accent);
             border-radius: 4px;
         }
 
@@ -142,6 +138,14 @@
             border-left: 4px solid #f44336;
         }
 
+        .buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem; /* Add spacing between buttons */
+            justify-content: center; /* Center align buttons */
+            margin-top: 2rem;
+        }
+
         .button {
             background: linear-gradient(45deg, #7b5a4b, #6b4e3b);
             border: none;
@@ -150,6 +154,10 @@
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            color: var(--text-primary);
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none; /* Ensure links look like buttons */
         }
 
         .button:hover {
@@ -190,13 +198,46 @@
             height: 2px;
             background: var(--accent);
         }
+
+        .risk-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        .risk-table th, .risk-table td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid var(--chart-grid);
+        }
+
+        .risk-table th {
+            background-color: var(--accent);
+            color: var(--text-primary);
+            text-transform: uppercase;
+        }
+
+        .risk-high {
+            background-color: rgba(244, 67, 54, 0.2); /* Red */
+            color: #f44336;
+        }
+
+        .risk-medium {
+            background-color: rgba(255, 193, 7, 0.2); /* Yellow */
+            color: #ffc107;
+        }
+
+        .risk-low {
+            background-color: rgba(76, 175, 80, 0.2); /* Green */
+            color: #4caf50;
+        }
+
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Original Sidebar -->
         <div class="sidebar">
-            <img src="/static/photo/hwda pink.png" alt="Logo">
+            <img src="/static/photo/hwda pink.png" alt="">
             <a href="{{ url_for('dashboard') }}" class="menu-item active">
                 <img src="/static/photo/dashboard.png" alt="Dashboard Icon">
                 Dashboard
@@ -225,10 +266,12 @@
                 <img src="/static/photo/mitigationplan.png" alt="Mitigation Planning Icon">
                 Mitigation Planning
             </a>
+            <a href="{{ url_for('logout') }}" class="menu-item">
+                <img src="/static/photo/logout.png" alt="Logout Icon"> Logout
+              </a>
         </div>
-
+    
         <div class="main-content">
-            <!-- Profile Header -->
             <div class="profile-header">
                 <div class="user-info">
                     <img src="/static/photo/Fotoprofile.png" alt="Profile">
@@ -241,20 +284,40 @@
             <div class="cards-container">
                 <div class="card">
                     <h2>Account Activity</h2>
-                    <ul id="activity-log">
-                        {% for activity in activities %}
-                        <li>{{ activity.timestamp }}: {{ activity.description }}</li>
-                        {% endfor %}
-                    </ul>
+                    {% if activities %}
+                        <ul id="activity-log">
+                            {% for activity in activities %}
+                            <li>{{ activity.timestamp }}: {{ activity.description }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p>No activity found.</p>
+                    {% endif %}
                     <button onclick="downloadActivityLog()" class="button">Download Log</button>
                 </div>
 
                 <div class="card">
                     <h2>Risk Overview</h2>
-                    {% for risk in risk_data %}
-                    <p>{{ risk.risk_type }}: {{ risk.count }} Risks</p>
-                    {% endfor %}
+                    <table class="risk-table">
+                        <thead>
+                            <tr>
+                                <th>Risk Type</th>
+                                <th>Count</th>
+                                <th>Severity</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for risk in risk_data %}
+                            <tr class="risk-{{ risk.severity|lower }}">
+                                <td>{{ risk.risk_type }}</td>
+                                <td>{{ risk.count }}</td>
+                                <td>{{ risk.severity }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
+                
 
                 <div class="card">
                     <h2>Asset Summary</h2>
@@ -273,11 +336,6 @@
                         {% endfor %}
                     </div>
                 </div>
-
-                <div class="card chart-container">
-                    <h2>Risk Distribution</h2>
-                    <canvas id="riskDistributionChart"></canvas>
-                </div>
             </div>
 
             <div class="buttons">
@@ -290,93 +348,22 @@
     </div>
 
     <script>
-        // Use Jinja2's tojson filter for proper JS conversion
-        const riskData = JSON.parse('{{ risk_data_json | safe }}');
-        let riskDistributionChart;
         function downloadActivityLog() {
-        window.location.href = "{{ url_for('download_activity_log') }}";
-        }
-       
-
-        function initChart() {
-            const ctx = document.getElementById('riskDistributionChart').getContext('2d');
-            riskDistributionChart = new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: riskData.map(item => item.risk_type),
-                    datasets: [{
-                        data: riskData.map(item => item.count),
-                        backgroundColor: ['#f44336', '#ffc107', '#4caf50'],
-                        borderColor: ['#fff'],
-                        borderWidth: 2
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: { position: 'right', labels: { color: '#e6d2c5' } },
-                        tooltip: { bodyColor: '#e6d2c5' }
-                    }
-                }
+            const logItems = document.querySelectorAll('#activity-log li');
+            let logText = "Activity Log:\n";
+            
+            logItems.forEach(item => {
+                logText += item.textContent + "\n";
             });
+            
+            const blob = new Blob([logText], { type: 'text/plain' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'activity_log.txt';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
-
-        // Real-time updates
-        // Replace both updateDashboard functions with this single version
-async function updateDashboard() {
-    try {
-        const response = await fetch('/api/dashboard-data');
-        const data = await response.json();
-        
-        // Update risk overview
-        document.querySelector('.card:nth-child(2)').innerHTML = `
-            <h2>Risk Overview</h2>
-            ${data.risk_data.map(r => `<p>${r.risk_type}: ${r.count} Risks</p>`).join('')}
-        `;
-
-        // Update assets
-        document.querySelector('.card:nth-child(3)').innerHTML = `
-            <h2>Asset Summary</h2>
-            <p>Total Assets: ${data.assets.total}</p>
-            <p>Critical Assets: ${data.assets.critical}</p>
-        `;
-
-        // Update threats
-        document.querySelector('.threat-feed').innerHTML = data.threats
-            .map(t => `
-                <div class="threat-item">
-                    <p><strong>${t.name}</strong> (${t.severity})</p>
-                    <p>${new Date(t.created_at).toLocaleString()}</p>
-                </div>
-            `).join('');
-
-            console.log("Fetched Risk Data:", data.risk_data);
-            if (!data.risk_data || data.risk_data.length === 0) {
-                console.warn("No risk data received!");
-                return;
-}
-
-        // Update chart
-        riskDistributionChart.data.labels = data.risk_data.map(r => r.risk_type);
-        riskDistributionChart.data.datasets[0].data = data.risk_data.map(r => r.count);
-        riskDistributionChart.update();
-
-        } catch (error) {
-        console.error('Error updating dashboard:', error);
-    }
-}
-
-        // Initial setup
-        document.addEventListener('DOMContentLoaded', () => {
-        const chartCanvas = document.getElementById('riskDistributionChart');
-        if (chartCanvas) {
-            initChart();
-            setInterval(updateDashboard, 10000);
-        } else {
-            console.error("Canvas element not found!");
-        }
-    });
-
     </script>
 </body>
 </html>
